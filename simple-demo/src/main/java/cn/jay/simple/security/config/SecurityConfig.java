@@ -1,5 +1,7 @@
 package cn.jay.simple.security.config;
 
+import cn.jay.simple.security.ConfigProperties;
+import cn.jay.simple.security.filter.JwtAuthenticationTokenFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
@@ -29,14 +32,21 @@ import javax.servlet.http.HttpServletResponse;
  * @Date: 2019/12/24 15:57
  */
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    public SecurityConfig(ConfigProperties configProperties) {
+        this.configProperties = configProperties;
+    }
+
+    private ConfigProperties configProperties;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -57,13 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-//    @Bean
-//    public JwtTokenFilter authenticationTokenFilterBean() throws Exception {
-//        JwtTokenFilter authenticationTokenFilter = new JwtTokenFilter(authenticationManagerBean());
-//        authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
-//        return authenticationTokenFilter;
-//    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
@@ -71,32 +74,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and().authorizeRequests().anyRequest().authenticated()
-            .and().httpBasic()
-            .and().formLogin()
-                .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
-            .and().exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler())
-            .and().csrf().disable()
-//            .addFilterBefore( , UsernamePasswordAuthenticationFilter.class)
-        ;
+        // 禁用sessionAdminAuthenticationEntryPoint
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // 禁用CSRF 开启跨域
+        http.csrf().disable().cors();
+
+        http.authorizeRequests().anyRequest().authenticated();
+        http.httpBasic();
+        http.formLogin().successHandler(authenticationSuccessHandler())
+                        .failureHandler(authenticationFailureHandler());
+        http.exceptionHandling().accessDeniedHandler((request, response, exception) -> {
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
+        });
     }
 
     private AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            redisTemplate.opsForValue().set("authentication", authentication, 3600);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().print(objectMapper.writeValueAsString(authentication));
-        };
-    }
-
-    private AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, exception) -> {
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
         };
     }
 
@@ -106,7 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private AuthenticationFailureHandler authenticationFailureHandler() {
         return (request, response, exception) -> {
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
         };

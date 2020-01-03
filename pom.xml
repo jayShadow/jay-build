@@ -20,6 +20,9 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <compiler.plugin.version>3.8.0</compiler.plugin.version>
 
+        <swagger.version>2.9.2</swagger.version>
+        <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
+
         <spring-boot.version>2.2.1.RELEASE</spring-boot.version>
         <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
     </properties>

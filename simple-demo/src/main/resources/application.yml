@@ -16,3 +16,38 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: -1ms
+
+config:
+  swagger:
+    title: 测试项目demo接口文档
+    description: 测试项目demo接口文档
+    version: 1.0.0
+    termsOfServiceUrl:
+    contactName:
+    contactUrl:
+    contactEmail:
+    license:
+    licenseUrl:
+  #安全认证
+  auth:
+    tokenExpireTime: 60             # token过期时间（分钟）
+    rememberMeExpireTime: 7         # 用户选择保存登录状态对应token过期时间（天）
+    loginTimeLimit: 10              # 限制用户登陆错误次数（次）
+    loginAfterTime: 10              # 错误超过次数后多少分钟后才能继续登录（分钟）
+    ignoreUrls:
+      - /login
+      - /api/system/user/getCurrentUserInfo
+      - /index
+      - /logout
+      - /swagger-ui.html
+#      - /swagger-resources/**
+      - /swagger-resources/configuration/ui
+      - /swagger-resources
+      - /v2/api-docs
+      - /swagger-resources/configuration/security
+#      - /swagger/**
+#      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
