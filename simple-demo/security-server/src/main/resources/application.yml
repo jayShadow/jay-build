@@ -7,7 +7,7 @@ spring:
   redis:
     host: localhost
     port: 6379
-#    password: abc123
+    password: abc123
     database: 0
     timeout: 1s
     lettuce:
@@ -35,18 +35,14 @@ config:
     loginTimeLimit: 10              # 限制用户登陆错误次数（次）
     loginAfterTime: 10              # 错误超过次数后多少分钟后才能继续登录（分钟）
     ignoreUrls:
-      - /login
       - /api/system/user/getCurrentUserInfo
       - /index
       - /logout
       - /swagger-ui.html
-#      - /swagger-resources/**
       - /swagger-resources/configuration/ui
       - /swagger-resources
       - /v2/api-docs
       - /swagger-resources/configuration/security
-#      - /swagger/**
-#      - /**/v2/api-docs
       - /**/*.js
       - /**/*.css
       - /**/*.png

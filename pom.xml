@@ -8,6 +8,7 @@
     <modules>
         <module>simple-demo</module>
         <module>cloud-demo</module>
+        <module>common-base</module>
     </modules>
     <packaging>pom</packaging>
     <name>security-demo</name>

@@ -3,19 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>security-demo</artifactId>
+        <artifactId>simple-demo</artifactId>
         <groupId>cn.jay</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.jay</groupId>
-    <artifactId>simple-demo</artifactId>
-    <packaging>pom</packaging>
+    <groupId>cn.jay.simple</groupId>
+    <artifactId>security-bean</artifactId>
 
-    <modules>
-        <module>security-server</module>
-        <module>security-bean</module>
-    </modules>
 
 </project>

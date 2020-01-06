@@ -1,7 +1,10 @@
 package cn.jay.simple.security.filter;
 
 import cn.jay.simple.security.login.CusAuthenticationManager;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,12 +23,12 @@ import java.io.IOException;
 @Component
 public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    protected AuthenticationFilter(CusAuthenticationManager authenticationManager) {
+    protected AuthenticationFilter(CusAuthenticationManager authenticationManager, ObjectMapper objectMapper) {
         super(new AntPathRequestMatcher("/login", "POST"));
         this.setAuthenticationManager(authenticationManager);
         this.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().print(authentication);
+            response.getWriter().print(JSONObject.toJSONString(authentication));
         });
         this.setAuthenticationFailureHandler((request, response, exception) -> {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

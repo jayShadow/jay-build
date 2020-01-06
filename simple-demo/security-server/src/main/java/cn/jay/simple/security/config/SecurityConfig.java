@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -66,12 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return manager;
     }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
@@ -79,15 +74,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.antMatcher("/**").authorizeRequests();
         // 禁用sessionAdminAuthenticationEntryPoint
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 禁用CSRF 开启跨域
         http.csrf().disable().cors();
 
-        http.authorizeRequests().anyRequest().authenticated();
-//        http.httpBasic();
-//        http.formLogin().successHandler(authenticationSuccessHandler())
-//                        .failureHandler(authenticationFailureHandler());
+        for (String url : configProperties.getAuth().getIgnoreUrls()) {
+            registry.antMatchers(url).permitAll();
+        }
+        // 剩余地址鉴权(必须在ignore url之后)
+        registry.anyRequest().authenticated();
+
         // 未登录认证异常
         http.exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -104,24 +102,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterAt(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationTokenFilter, BasicAuthenticationFilter.class);
     }
-
-//    private AuthenticationSuccessHandler authenticationSuccessHandler() {
-//        return (request, response, authentication) -> {
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            response.getWriter().print(objectMapper.writeValueAsString(authentication));
-//        };
-//    }
-//
-//    /**
-//     * 登录认证错误 处理器
-//     * @return 错误处理器
-//     */
-//    private AuthenticationFailureHandler authenticationFailureHandler() {
-//        return (request, response, exception) -> {
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
-//        };
-//    }
 
 }
