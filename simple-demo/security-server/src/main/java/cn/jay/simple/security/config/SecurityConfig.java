@@ -1,29 +1,29 @@
 package cn.jay.simple.security.config;
 
 import cn.jay.simple.security.ConfigProperties;
-import cn.jay.simple.security.filter.AuthenticationFilter;
+import cn.jay.simple.security.filter.CommonAuthenticationFilter;
 import cn.jay.simple.security.filter.JwtAuthenticationTokenFilter;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -43,14 +43,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private ConfigProperties configProperties;
 
-    private AuthenticationFilter authenticationFilter;
+    private UserDetailsService userDetailsService;
 
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
-    public SecurityConfig(ConfigProperties configProperties, AuthenticationFilter authenticationFilter, JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper) {
+    public SecurityConfig(ConfigProperties configProperties,
+                          JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper,
+                          UserDetailsService userDetailsService) {
         this.objectMapper = objectMapper;
         this.configProperties = configProperties;
-        this.authenticationFilter = authenticationFilter;
+        this.userDetailsService = userDetailsService;
         this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
     }
 
@@ -59,9 +61,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public CommonAuthenticationFilter commonAuthenticationFilter() throws Exception {
+        CommonAuthenticationFilter filter = new CommonAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().print(JSONObject.toJSONString(authentication));
+        });
+        filter.setAuthenticationFailureHandler((request, response, exception) -> {
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().print(exception.getMessage());
+        });
+        return filter;
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
+        daoProvider.setUserDetailsService(userDetailsService);
+        auth.authenticationProvider(daoProvider);
     }
 
     @Override
@@ -91,7 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
         });
 
-        http.addFilterAt(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(commonAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationTokenFilter, BasicAuthenticationFilter.class);
     }
 
