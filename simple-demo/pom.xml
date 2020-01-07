@@ -16,6 +16,7 @@
     <modules>
         <module>security-server</module>
         <module>security-bean</module>
+        <module>security-service</module>
     </modules>
 
 </project>

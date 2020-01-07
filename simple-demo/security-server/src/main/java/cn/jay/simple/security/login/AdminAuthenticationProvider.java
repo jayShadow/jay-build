@@ -1,11 +1,15 @@
 package cn.jay.simple.security.login;
 
+import cn.jay.simple.security.bean.SecurityUser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
@@ -19,14 +23,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdminAuthenticationProvider implements AuthenticationProvider {
 
-//    @Autowired
-//    UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // 获取前端表单中输入后返回的用户名、密码
-        String userName = (String) authentication.getPrincipal();
+        String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
+
+        SecurityUser userDetails = (SecurityUser) userDetailsService.loadUserByUsername(username);
+
+        if (userDetails == null) {
+            throw new BadCredentialsException("username error！");
+        }
+        if (!userDetails.getPassword().equals(password)) {
+            throw new BadCredentialsException("password error！");
+        }
 
 //        boolean isValid = PasswordUtils.isValidPassword(password, userInfo.getPassword(), userInfo.getCurrentUserInfo().getSalt());
 //        // 验证密码
@@ -55,7 +68,7 @@ public class AdminAuthenticationProvider implements AuthenticationProvider {
 //        user.setToken(token);
 //        userMapper.updateById(user);
 //        userInfo.getCurrentUserInfo().setToken(token);
-        return new UsernamePasswordAuthenticationToken(userName, password, null);
+        return new UsernamePasswordAuthenticationToken(userDetails.getLoginUser(), password, userDetails.getAuthorities());
     }
 
     @Override

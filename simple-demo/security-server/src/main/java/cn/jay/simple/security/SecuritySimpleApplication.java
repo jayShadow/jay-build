@@ -1,5 +1,7 @@
 package cn.jay.simple.security;
 
+import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -10,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  */
 @SpringBootApplication
 @EnableConfigurationProperties({ConfigProperties.class})
+@MapperScan("cn.jay.simple.security.mapper")
 public class SecuritySimpleApplication {
 
     public static void main(String[] args) {
