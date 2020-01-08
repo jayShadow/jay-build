@@ -1,4 +1,4 @@
-package cn.jay.simple.security.filter;
+package cn.jay.simple.security.filter.login;
 
 //import cn.jay.simple.security.login.CusAuthenticationManager;
 import com.alibaba.fastjson.JSONObject;
@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -22,23 +23,20 @@ import java.io.IOException;
 public class CommonAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     public CommonAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/login", "POST"));
-//        this.setAuthenticationSuccessHandler((request, response, authentication) -> {
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            response.getWriter().print(JSONObject.toJSONString(authentication));
-//        });
-//        this.setAuthenticationFailureHandler((request, response, exception) -> {
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.getWriter().print(exception.getMessage());
-//        });
+        super(new AntPathRequestMatcher("/common/login", "POST"));
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         String username = request.getParameter("username");
+        if (username == null) {
+            throw new InternalAuthenticationServiceException("Failed to get the username");
+        }
         String password = request.getParameter("password");
-        return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password, null));
+        if (password == null) {
+            throw new InternalAuthenticationServiceException("Failed to get the password");
+        }
+        return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 
 

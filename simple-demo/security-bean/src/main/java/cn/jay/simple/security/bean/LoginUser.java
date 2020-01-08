@@ -25,4 +25,7 @@ public class LoginUser extends BaseLoginUser {
     @ApiModelProperty(value = "主键", position = 1)
     private Long id;
 
+    @ApiModelProperty(value = "手机号", position = 13)
+    private String mobile;
+
 }

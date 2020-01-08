@@ -1,17 +1,19 @@
 package cn.jay.simple.security.config;
 
 import cn.jay.simple.security.ConfigProperties;
-import cn.jay.simple.security.filter.CommonAuthenticationFilter;
-import cn.jay.simple.security.filter.JwtAuthenticationTokenFilter;
+import cn.jay.simple.security.filter.login.CommonAuthenticationFilter;
+import cn.jay.simple.security.filter.login.SmsCodeAuthenticationFilter;
+import cn.jay.simple.security.filter.token.JwtAuthenticationTokenFilter;
+import cn.jay.simple.security.provider.CommonAuthenticationProvider;
+import cn.jay.simple.security.provider.SmsCodeAuthenticationProvider;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,11 +21,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -41,38 +42,47 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private ObjectMapper objectMapper;
 
-    private ConfigProperties configProperties;
+    private UserDetailsService mobileService;
 
-    private UserDetailsService userDetailsService;
+    private UserDetailsService usernameService;
+
+    private ConfigProperties configProperties;
 
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     public SecurityConfig(ConfigProperties configProperties,
                           JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper,
-                          UserDetailsService userDetailsService) {
+                          @Qualifier("usernameServiceImpl") UserDetailsService usernameService,
+                          @Qualifier("mobileServiceImpl") UserDetailsService mobileService) {
         this.objectMapper = objectMapper;
+        this.mobileService = mobileService;
+        this.usernameService = usernameService;
         this.configProperties = configProperties;
-        this.userDetailsService = userDetailsService;
         this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
     }
 
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public CommonAuthenticationFilter commonAuthenticationFilter() throws Exception {
+        CommonAuthenticationFilter filter = new CommonAuthenticationFilter();
+        setAuthenticationHandler(filter);
+        return filter;
     }
 
     @Bean
-    public CommonAuthenticationFilter commonAuthenticationFilter() throws Exception {
-        CommonAuthenticationFilter filter = new CommonAuthenticationFilter();
-        filter.setAuthenticationManager(authenticationManagerBean());
+    public SmsCodeAuthenticationFilter smsCodeAuthenticationFilter() throws Exception {
+        SmsCodeAuthenticationFilter filter = new SmsCodeAuthenticationFilter();
+        setAuthenticationHandler(filter);
+        return filter;
+    }
+
+    private void setAuthenticationHandler(AbstractAuthenticationProcessingFilter filter) throws Exception {
+        filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.getWriter().print(JSONObject.toJSONString(authentication));
         });
         filter.setAuthenticationFailureHandler((request, response, exception) -> {
@@ -80,14 +90,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print(exception.getMessage());
         });
-        return filter;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
-        daoProvider.setUserDetailsService(userDetailsService);
-        auth.authenticationProvider(daoProvider);
+        AuthenticationProvider commonAuthenticationProvider =
+                new CommonAuthenticationProvider(usernameService, passwordEncoder());
+        AuthenticationProvider smsCodeAuthenticationProvider =
+                new SmsCodeAuthenticationProvider(mobileService);
+        auth.authenticationProvider(commonAuthenticationProvider)
+            .authenticationProvider(smsCodeAuthenticationProvider);
     }
 
     @Override
@@ -106,18 +118,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 未登录认证异常
         http.exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
         });
         // 登录过后访问无权限的接口时自定义403响应内容
         http.exceptionHandling().accessDeniedHandler((request, response, exception) -> {
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
         });
 
         http.addFilterAt(commonAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(smsCodeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationTokenFilter, BasicAuthenticationFilter.class);
     }
 

@@ -59,7 +59,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.loginUser.getPassword();
+        return this.loginUser.getUsername();
     }
 
     @Override

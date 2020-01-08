@@ -7,7 +7,6 @@ import cn.jay.simple.security.mapper.LoginUserMapper;
 import cn.jay.simple.security.mapper.SecurityAuthorityMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -17,21 +16,24 @@ import java.util.Set;
 
 /**
  * @Author: Jay
- * @Date: 2020/1/7 13:53
+ * @Date: 2020/1/8 11:41
  */
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class MobileServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private LoginUserMapper loginUserMapper;
+    private final LoginUserMapper loginUserMapper;
 
-    @Autowired
-    private SecurityAuthorityMapper securityAuthorityMapper;
+    private final SecurityAuthorityMapper securityAuthorityMapper;
+
+    public MobileServiceImpl(LoginUserMapper loginUserMapper, SecurityAuthorityMapper securityAuthorityMapper) {
+        this.loginUserMapper = loginUserMapper;
+        this.securityAuthorityMapper = securityAuthorityMapper;
+    }
 
     @Override
-    public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
+    public SecurityUser loadUserByUsername(String mobile) throws UsernameNotFoundException {
         QueryWrapper<LoginUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(LoginUser::getUsername, username);
+        queryWrapper.lambda().eq(LoginUser::getMobile, mobile);
         LoginUser loginUser = loginUserMapper.selectOne(queryWrapper);
         if (loginUser != null) {
             return new SecurityUser(loginUser, loadUserAuthorities());
