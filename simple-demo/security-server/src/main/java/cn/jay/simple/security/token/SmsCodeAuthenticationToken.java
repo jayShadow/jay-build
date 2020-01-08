@@ -1,5 +1,6 @@
 package cn.jay.simple.security.token;
 
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -8,7 +9,7 @@ import java.util.Collection;
  * @Author: Jay
  * @Date: 2020/1/8 10:46
  */
-public class SmsCodeAuthenticationToken extends JwtAuthenticationToken {
+public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     private final Object principal;
 

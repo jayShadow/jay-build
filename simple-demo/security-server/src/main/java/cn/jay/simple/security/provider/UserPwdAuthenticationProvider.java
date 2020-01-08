@@ -49,8 +49,8 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
             log.debug("Authentication failed: 密码不能为空");
             throw new BadCredentialsException("密码不能为空");
         }
-        String smscode = authentication.getCredentials().toString();
-        if (!StringUtils.equals(smscode, loadedUser.getUsername())) {
+        String password = authentication.getCredentials().toString();
+        if (!passwordEncoder.matches(password, loadedUser.getPassword())) {
             log.debug("Authentication failed: 密码错误");
             throw new BadCredentialsException("密码错误");
         }
@@ -61,7 +61,6 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
         SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(
                 principal, authentication.getCredentials(), principal.getAuthorities());
         result.setDetails(authentication.getDetails());
-        result.setJwtToken();
         return result;
     }
 

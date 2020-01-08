@@ -15,24 +15,24 @@ import java.util.Set;
 
 /**
  * @Author: Jay
- * @Date: 2020/1/8 11:41
+ * @Date: 2020/1/7 13:53
  */
 @Component
-public class MobileServiceImpl implements UserDetailsService {
+public class UserPwdServiceImpl implements UserDetailsService {
 
     private final LoginUserMapper loginUserMapper;
 
     private final SecurityAuthorityMapper securityAuthorityMapper;
 
-    public MobileServiceImpl(LoginUserMapper loginUserMapper, SecurityAuthorityMapper securityAuthorityMapper) {
+    public UserPwdServiceImpl(LoginUserMapper loginUserMapper, SecurityAuthorityMapper securityAuthorityMapper) {
         this.loginUserMapper = loginUserMapper;
         this.securityAuthorityMapper = securityAuthorityMapper;
     }
 
     @Override
-    public SecurityUser loadUserByUsername(String mobile) throws UsernameNotFoundException {
+    public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
         QueryWrapper<LoginUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(LoginUser::getMobile, mobile);
+        queryWrapper.lambda().eq(LoginUser::getUsername, username);
         LoginUser loginUser = loginUserMapper.selectOne(queryWrapper);
         if (loginUser != null) {
             return new SecurityUser(loginUser, loadUserAuthorities());

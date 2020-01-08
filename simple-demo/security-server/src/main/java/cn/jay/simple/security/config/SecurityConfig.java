@@ -6,6 +6,7 @@ import cn.jay.simple.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.simple.security.filter.token.JwtAuthenticationTokenFilter;
 import cn.jay.simple.security.provider.UserPwdAuthenticationProvider;
 import cn.jay.simple.security.provider.SmsCodeAuthenticationProvider;
+import cn.jay.simple.security.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +41,8 @@ import javax.servlet.http.HttpServletResponse;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final JwtTokenUtil jwtTokenUtil;
+
     private final ObjectMapper objectMapper;
 
     private final UserDetailsService mobileService;
@@ -49,10 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
-    public SecurityConfig(ConfigProperties configProperties,
-                          @Qualifier("usernameServiceImpl") UserDetailsService usernameService,
-                          @Qualifier("mobileServiceImpl") UserDetailsService mobileService,
+    public SecurityConfig(JwtTokenUtil jwtTokenUtil, ConfigProperties configProperties,
+                          @Qualifier("userPwdServiceImpl") UserDetailsService usernameService,
+                          @Qualifier("smsCodeServiceImpl") UserDetailsService mobileService,
                           JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper) {
+        this.jwtTokenUtil = jwtTokenUtil;
         this.objectMapper = objectMapper;
         this.mobileService = mobileService;
         this.usernameService = usernameService;
@@ -82,7 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            response.getWriter().print("登陆成功");
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            response.getWriter().print("登陆成功:"+ jwtTokenUtil.generateToken(userDetails));
         });
         filter.setAuthenticationFailureHandler((request, response, exception) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);

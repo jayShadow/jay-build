@@ -4,6 +4,7 @@ import cn.jay.simple.security.ConfigProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import java.util.Map;
  * @Author: Jay
  * @Date: 2020/1/3 9:55
  */
+@Slf4j
 @Component
 public class JwtTokenUtil {
 
@@ -24,10 +26,41 @@ public class JwtTokenUtil {
 
     private final Long rememberMeExpireTime;
 
-    private JwtTokenUtil(ConfigProperties configProperties) {
+    public JwtTokenUtil(ConfigProperties configProperties) {
         this.secret = configProperties.getAuth().getSecret();
         this.tokenExpireTime = configProperties.getAuth().getTokenExpireTime();
         this.rememberMeExpireTime = configProperties.getAuth().getRememberMeExpireTime();
+        log.info("JwtTokenUtil init success");
+    }
+
+    /**
+     * 从数据声明生成令牌
+     *
+     * @param sub        主题
+     * @param claims     数据声明
+     * @param rememberMe 是否记住
+     * @return 令牌
+     */
+    public final String generateToken(String sub, Map<String, Object> claims, Boolean rememberMe) {
+        Long expireTime = rememberMe ? rememberMeExpireTime : tokenExpireTime;
+        return Jwts.builder()
+                .setSubject(sub)
+                .setIssuedAt(new Date())
+                .setClaims(claims)// 主题 - 存用户名
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime))      // 过期时间
+                .signWith(SignatureAlgorithm.HS512, secret)                                 // 加密算法和密钥
+                .compact();
+    }
+
+    /**
+     * 从数据声明生成令牌
+     *
+     * @param sub    主题
+     * @param claims 数据声明
+     * @return 令牌
+     */
+    public final String generateToken(String sub, Map<String, Object> claims) {
+        return generateToken(sub, claims, false);
     }
 
     /**
@@ -36,21 +69,7 @@ public class JwtTokenUtil {
      * @param claims 数据声明
      * @return 令牌
      */
-    private final String generateToken(String sub, Map<String, Object> claims, Boolean rememberMe) {
-        Long expireTime = rememberMe ? rememberMeExpireTime : tokenExpireTime;
-        return Jwts.builder()
-                .setSubject(sub)
-                .setClaims(claims)// 主题 - 存用户名
-                .setExpiration(new Date(System.currentTimeMillis() + expireTime))      // 过期时间
-                .signWith(SignatureAlgorithm.HS512, secret)                                 // 加密算法和密钥
-                .compact();
-    }
-
-    private final String generateToken(String sub, Map<String, Object> claims) {
-        return generateToken(sub, claims, false);
-    }
-
-    private final String generateToken(Map<String, Object> claims) {
+    public final String generateToken(Map<String, Object> claims) {
         return generateToken(null, claims);
     }
 
@@ -60,11 +79,9 @@ public class JwtTokenUtil {
      * @param userDetails 用户
      * @return 令牌
      */
-    public String generateToken(UserDetails userDetails) {
+    public final String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>(2);
-        claims.put(Claims.SUBJECT, userDetails.getUsername());
-        claims.put(Claims.ISSUED_AT, new Date());
-        return generateToken(claims);
+        return generateToken(userDetails.getUsername(), claims);
     }
 
     /**
@@ -84,9 +101,8 @@ public class JwtTokenUtil {
     }
 
 
-
     /**
-     * 从令牌中获取用户名
+     * 从令牌中获取主题
      *
      * @param token 令牌
      * @return 用户名
@@ -125,15 +141,13 @@ public class JwtTokenUtil {
      * @return 新令牌
      */
     public String refreshToken(String token) {
-        String refreshedToken;
         try {
             Claims claims = getClaimsFromToken(token);
-            claims.put(Claims.ISSUED_AT, new Date());
-            refreshedToken = generateToken(claims);
+            String sub = getUsernameFromToken(token);
+            return generateToken(sub, claims);
         } catch (Exception e) {
-            refreshedToken = null;
+            return null;
         }
-        return refreshedToken;
     }
 
     /**
@@ -144,7 +158,6 @@ public class JwtTokenUtil {
      * @return 是否有效
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-//        JwtUser user = (JwtUser) userDetails;
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

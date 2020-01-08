@@ -28,7 +28,6 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
     private final UserDetailsService userDetailsService;
 
-
     public SmsCodeAuthenticationProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
