@@ -1,11 +1,11 @@
 package cn.jay.simple.security.config;
 
 import cn.jay.simple.security.ConfigProperties;
-import cn.jay.simple.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.simple.security.filter.login.SmsCodeAuthenticationFilter;
+import cn.jay.simple.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.simple.security.filter.token.JwtAuthenticationTokenFilter;
-import cn.jay.simple.security.provider.UserPwdAuthenticationProvider;
 import cn.jay.simple.security.provider.SmsCodeAuthenticationProvider;
+import cn.jay.simple.security.provider.UserPwdAuthenticationProvider;
 import cn.jay.simple.security.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            response.getWriter().print("登陆成功:"+ jwtTokenUtil.generateToken(userDetails));
+            response.getWriter().print("登陆成功:" + jwtTokenUtil.generateToken(userDetails));
         });
         filter.setAuthenticationFailureHandler((request, response, exception) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * <p> 认证权限入口 - 未登录的情况下访问所有接口都会拦截到此 </p>
@@ -20,12 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
         // 未登录 或 token过期
         if (e != null) {
-//            ResponseUtils.out(response, ApiResult.expired(e.getMessage()));
+            response.getWriter().print(e.getMessage());
         } else {
-//            ResponseUtils.out(response, ApiResult.expired("jwtToken过期!"));
+            response.getWriter().print("jwtToken过期!");
         }
     }
 
