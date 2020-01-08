@@ -1,5 +1,6 @@
 package cn.jay.simple.security.filter.token;
 
+import cn.jay.simple.security.bean.SecurityUser;
 import cn.jay.simple.security.token.UserPwdAuthenticationToken;
 import cn.jay.simple.security.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -41,9 +41,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         if (!StringUtils.isEmpty(token)) {
             String username = jwtTokenUtil.getUsernameFromToken(token);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                if (jwtTokenUtil.validateToken(token, userDetails)) {
-                    UserPwdAuthenticationToken authentication = new UserPwdAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityUser loadedUser = (SecurityUser) userDetailsService.loadUserByUsername(username);
+                if (jwtTokenUtil.validateToken(token, loadedUser)) {
+                    UserPwdAuthenticationToken authentication = new UserPwdAuthenticationToken(loadedUser.getLoginUser(), null, loadedUser.getAuthorities());
 //                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     // 将 authentication 存入 ThreadLocal，方便后续获取用户信息
                     SecurityContextHolder.getContext().setAuthentication(authentication);

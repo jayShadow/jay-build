@@ -1,6 +1,7 @@
 package cn.jay.simple.security.config;
 
 import cn.jay.simple.security.ConfigProperties;
+import cn.jay.simple.security.bean.LoginUser;
 import cn.jay.simple.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.simple.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.simple.security.filter.token.JwtAuthenticationTokenFilter;
@@ -21,7 +22,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -87,8 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            response.getWriter().print("登陆成功:" + jwtTokenUtil.generateToken(userDetails));
+            LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+            response.getWriter().print("登陆成功:" + jwtTokenUtil.generateToken(loginUser));
         });
         filter.setAuthenticationFailureHandler((request, response, exception) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);

@@ -1,5 +1,6 @@
 package cn.jay.simple.security.provider;
 
+import cn.jay.simple.security.bean.SecurityUser;
 import cn.jay.simple.security.token.SmsCodeAuthenticationToken;
 import cn.jay.simple.security.token.UserPwdAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -31,7 +31,7 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UserPwdAuthenticationToken token = (UserPwdAuthenticationToken) authentication;
-        UserDetails loadedUser = userDetailsService.loadUserByUsername(token.getName());
+        SecurityUser loadedUser = (SecurityUser) userDetailsService.loadUserByUsername(token.getName());
         if (loadedUser == null) {
             throw new InternalAuthenticationServiceException(
                     "UserDetailsService returned null, which is an interface contract violation");
@@ -48,9 +48,9 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
         return createSuccessAuthentication(loadedUser, authentication);
     }
 
-    protected Authentication createSuccessAuthentication(UserDetails principal, Authentication authentication) {
+    protected Authentication createSuccessAuthentication(SecurityUser loadedUser, Authentication authentication) {
         SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(
-                principal, authentication.getCredentials(), principal.getAuthorities());
+                loadedUser.getLoginUser(), authentication.getCredentials(), loadedUser.getAuthorities());
         result.setDetails(authentication.getDetails());
         return result;
     }

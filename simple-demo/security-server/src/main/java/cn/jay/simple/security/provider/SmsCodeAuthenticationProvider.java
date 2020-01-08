@@ -1,5 +1,6 @@
 package cn.jay.simple.security.provider;
 
+import cn.jay.simple.security.bean.SecurityUser;
 import cn.jay.simple.security.token.SmsCodeAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -28,7 +28,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         SmsCodeAuthenticationToken token = (SmsCodeAuthenticationToken) authentication;
-        UserDetails loadedUser = userDetailsService.loadUserByUsername(token.getMobile());
+        SecurityUser loadedUser = (SecurityUser) userDetailsService.loadUserByUsername(token.getMobile());
         if (loadedUser == null) {
             throw new InternalAuthenticationServiceException(
                     "UserDetailsService returned null, which is an interface contract violation");
@@ -45,9 +45,9 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         return createSuccessAuthentication(loadedUser, authentication);
     }
 
-    protected Authentication createSuccessAuthentication(UserDetails principal, Authentication authentication) {
+    protected Authentication createSuccessAuthentication(SecurityUser loadedUser, Authentication authentication) {
         SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(
-                principal, authentication.getCredentials(), principal.getAuthorities());
+                loadedUser.getLoginUser(), authentication.getCredentials(), loadedUser.getAuthorities());
         result.setDetails(authentication.getDetails());
         return result;
     }

@@ -1,6 +1,7 @@
 package cn.jay.simple.security.utils;
 
 import cn.jay.simple.security.ConfigProperties;
+import cn.jay.simple.security.bean.LoginUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -44,9 +45,9 @@ public class JwtTokenUtil {
     public final String generateToken(String sub, Map<String, Object> claims, Boolean rememberMe) {
         Long expireTime = rememberMe ? rememberMeExpireTime : tokenExpireTime;
         return Jwts.builder()
+                .setClaims(claims)      // 必须先设置 否则将覆盖
                 .setSubject(sub)
                 .setIssuedAt(new Date())
-                .setClaims(claims)// 主题 - 存用户名
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))      // 过期时间
                 .signWith(SignatureAlgorithm.HS512, secret)                                 // 加密算法和密钥
                 .compact();
@@ -55,33 +56,21 @@ public class JwtTokenUtil {
     /**
      * 从数据声明生成令牌
      *
-     * @param sub    主题
-     * @param claims 数据声明
+     * @param sub 主题
      * @return 令牌
      */
-    public final String generateToken(String sub, Map<String, Object> claims) {
-        return generateToken(sub, claims, false);
-    }
-
-    /**
-     * 从数据声明生成令牌
-     *
-     * @param claims 数据声明
-     * @return 令牌
-     */
-    public final String generateToken(Map<String, Object> claims) {
-        return generateToken(null, claims);
+    public final String generateToken(String sub) {
+        return generateToken(sub, new HashMap<>(), false);
     }
 
     /**
      * 生成令牌
      *
-     * @param userDetails 用户
+     * @param loginUser 用户
      * @return 令牌
      */
-    public final String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>(2);
-        return generateToken(userDetails.getUsername(), claims);
+    public final String generateToken(LoginUser loginUser) {
+        return generateToken(loginUser.getUsername(), new HashMap<>(), false);
     }
 
     /**
@@ -144,7 +133,7 @@ public class JwtTokenUtil {
         try {
             Claims claims = getClaimsFromToken(token);
             String sub = getUsernameFromToken(token);
-            return generateToken(sub, claims);
+            return generateToken(sub, claims, false);
         } catch (Exception e) {
             return null;
         }

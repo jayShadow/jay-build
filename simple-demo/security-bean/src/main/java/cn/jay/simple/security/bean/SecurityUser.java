@@ -21,8 +21,6 @@ public class SecurityUser implements UserDetails {
 
     private transient Set<SecurityAuthority> securityAuthorities;
 
-    private String jwtToken;
-
     public SecurityUser(LoginUser loginUser, Set<SecurityAuthority> securityAuthorities) {
         this.loginUser = loginUser;
         this.securityAuthorities = securityAuthorities;
@@ -41,14 +39,6 @@ public class SecurityUser implements UserDetails {
 
     public LoginUser getLoginUser() {
         return this.loginUser;
-    }
-
-    public String getJwtToken() {
-        return jwtToken;
-    }
-
-    public void setJwtToken(String jwtToken) {
-        this.jwtToken = jwtToken;
     }
 
     @Override
