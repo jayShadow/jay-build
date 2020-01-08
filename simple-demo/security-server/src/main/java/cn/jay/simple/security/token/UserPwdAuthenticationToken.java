@@ -6,28 +6,24 @@ import java.util.Collection;
 
 /**
  * @Author: Jay
- * @Date: 2020/1/8 10:46
+ * @Date: 2020/1/8 17:12
  */
-public class SmsCodeAuthenticationToken extends JwtAuthenticationToken {
+public class UserPwdAuthenticationToken extends JwtAuthenticationToken {
 
     private final Object principal;
 
-    private final String mobile;
-
     private Object credentials;
 
-    public SmsCodeAuthenticationToken(String mobile, Object credentials) {
+    public UserPwdAuthenticationToken(Object principal, Object credentials) {
         super(null);
-        this.principal = null;
-        this.mobile = mobile;
+        this.principal = principal;
         this.credentials = credentials;
         setAuthenticated(false);
     }
 
-    public SmsCodeAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    public UserPwdAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
-        this.mobile = null;
         this.credentials = credentials;
         setAuthenticated(true);
     }
@@ -40,10 +36,6 @@ public class SmsCodeAuthenticationToken extends JwtAuthenticationToken {
     @Override
     public Object getPrincipal() {
         return this.principal;
-    }
-
-    public String getMobile() {
-        return this.mobile;
     }
 
 }

@@ -1,12 +1,11 @@
 package cn.jay.simple.security.config;
 
 import cn.jay.simple.security.ConfigProperties;
-import cn.jay.simple.security.filter.login.CommonAuthenticationFilter;
+import cn.jay.simple.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.simple.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.simple.security.filter.token.JwtAuthenticationTokenFilter;
-import cn.jay.simple.security.provider.CommonAuthenticationProvider;
+import cn.jay.simple.security.provider.UserPwdAuthenticationProvider;
 import cn.jay.simple.security.provider.SmsCodeAuthenticationProvider;
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,20 +39,20 @@ import javax.servlet.http.HttpServletResponse;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    private UserDetailsService mobileService;
+    private final UserDetailsService mobileService;
 
-    private UserDetailsService usernameService;
+    private final UserDetailsService usernameService;
 
-    private ConfigProperties configProperties;
+    private final ConfigProperties configProperties;
 
-    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     public SecurityConfig(ConfigProperties configProperties,
-                          JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper,
                           @Qualifier("usernameServiceImpl") UserDetailsService usernameService,
-                          @Qualifier("mobileServiceImpl") UserDetailsService mobileService) {
+                          @Qualifier("mobileServiceImpl") UserDetailsService mobileService,
+                          JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.mobileService = mobileService;
         this.usernameService = usernameService;
@@ -66,8 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CommonAuthenticationFilter commonAuthenticationFilter() throws Exception {
-        CommonAuthenticationFilter filter = new CommonAuthenticationFilter();
+    public UserPwdAuthenticationFilter commonAuthenticationFilter() throws Exception {
+        UserPwdAuthenticationFilter filter = new UserPwdAuthenticationFilter();
         setAuthenticationHandler(filter);
         return filter;
     }
@@ -83,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            response.getWriter().print(JSONObject.toJSONString(authentication));
+            response.getWriter().print("登陆成功");
         });
         filter.setAuthenticationFailureHandler((request, response, exception) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
@@ -95,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         AuthenticationProvider commonAuthenticationProvider =
-                new CommonAuthenticationProvider(usernameService, passwordEncoder());
+                new UserPwdAuthenticationProvider(usernameService, passwordEncoder());
         AuthenticationProvider smsCodeAuthenticationProvider =
                 new SmsCodeAuthenticationProvider(mobileService);
         auth.authenticationProvider(commonAuthenticationProvider)

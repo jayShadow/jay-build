@@ -1,5 +1,6 @@
 package cn.jay.simple.security.utils;
 
+import cn.jay.simple.security.ConfigProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,10 +18,17 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil {
 
-    private String secret = "privateSecret";
+    private final String secret;
 
-    // 过期时间 毫秒
-    private Long expiration = 60 * 60 * 1000L;
+    private final Long tokenExpireTime;
+
+    private final Long rememberMeExpireTime;
+
+    private JwtTokenUtil(ConfigProperties configProperties) {
+        this.secret = configProperties.getAuth().getSecret();
+        this.tokenExpireTime = configProperties.getAuth().getTokenExpireTime();
+        this.rememberMeExpireTime = configProperties.getAuth().getRememberMeExpireTime();
+    }
 
     /**
      * 从数据声明生成令牌
@@ -28,9 +36,35 @@ public class JwtTokenUtil {
      * @param claims 数据声明
      * @return 令牌
      */
-    private String generateToken(Map<String, Object> claims) {
-        Date expirationDate = new Date(System.currentTimeMillis() + expiration);
-        return Jwts.builder().setClaims(claims).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, secret).compact();
+    private final String generateToken(String sub, Map<String, Object> claims, Boolean rememberMe) {
+        Long expireTime = rememberMe ? rememberMeExpireTime : tokenExpireTime;
+        return Jwts.builder()
+                .setSubject(sub)
+                .setClaims(claims)// 主题 - 存用户名
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime))      // 过期时间
+                .signWith(SignatureAlgorithm.HS512, secret)                                 // 加密算法和密钥
+                .compact();
+    }
+
+    private final String generateToken(String sub, Map<String, Object> claims) {
+        return generateToken(sub, claims, false);
+    }
+
+    private final String generateToken(Map<String, Object> claims) {
+        return generateToken(null, claims);
+    }
+
+    /**
+     * 生成令牌
+     *
+     * @param userDetails 用户
+     * @return 令牌
+     */
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>(2);
+        claims.put(Claims.SUBJECT, userDetails.getUsername());
+        claims.put(Claims.ISSUED_AT, new Date());
+        return generateToken(claims);
     }
 
     /**
@@ -49,18 +83,7 @@ public class JwtTokenUtil {
         return claims;
     }
 
-    /**
-     * 生成令牌
-     *
-     * @param userDetails 用户
-     * @return 令牌
-     */
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>(2);
-        claims.put(Claims.SUBJECT, userDetails.getUsername());
-        claims.put(Claims.ISSUED_AT, new Date());
-        return generateToken(claims);
-    }
+
 
     /**
      * 从令牌中获取用户名
@@ -125,5 +148,6 @@ public class JwtTokenUtil {
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
 
 }

@@ -2,6 +2,7 @@ package cn.jay.simple.security.filter.login;
 
 //import cn.jay.simple.security.login.CusAuthenticationManager;
 
+import cn.jay.simple.security.token.UserPwdAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class CommonAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class UserPwdAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public CommonAuthenticationFilter() {
+    public UserPwdAuthenticationFilter() {
         super(new AntPathRequestMatcher("/common/login", "POST"));
     }
 
@@ -32,7 +33,7 @@ public class CommonAuthenticationFilter extends AbstractAuthenticationProcessing
         if (password == null) {
             throw new InternalAuthenticationServiceException("Failed to get the password");
         }
-        return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        return this.getAuthenticationManager().authenticate(new UserPwdAuthenticationToken(username, password));
     }
 
 

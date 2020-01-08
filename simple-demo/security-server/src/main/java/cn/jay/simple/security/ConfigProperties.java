@@ -40,8 +40,9 @@ public class ConfigProperties {
 
     @Data
     public static class Auth {
-        private Integer tokenExpireTime;
-        private Integer rememberMeExpireTime;
+        private String secret;
+        private Long tokenExpireTime;
+        private Long rememberMeExpireTime;
         private Integer loginTimeLimit;
         private Integer loginAfterTime;
         private List<String> ignoreUrls;
