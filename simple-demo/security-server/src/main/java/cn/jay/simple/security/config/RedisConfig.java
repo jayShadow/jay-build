@@ -36,6 +36,7 @@ public class RedisConfig {
 
     /**
      * redis 操作工具类
+     *
      * @param redisConnectionFactory redis 连接工厂
      * @return redis 操作工具类
      */
@@ -54,6 +55,7 @@ public class RedisConfig {
 
     /**
      * key 序列化规则
+     *
      * @return key 序列化规则
      */
 //    @Nonnull
@@ -63,6 +65,7 @@ public class RedisConfig {
 
     /**
      * value 序列化规则
+     *
      * @return value 序列化规则
      */
 //    @Nonnull

@@ -1,6 +1,5 @@
 package cn.jay.simple.security.bean;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,7 +32,7 @@ public class SecurityUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         if (!CollectionUtils.isEmpty(securityAuthorities)) {
-            for (SecurityAuthority securityAuthority: securityAuthorities) {
+            for (SecurityAuthority securityAuthority : securityAuthorities) {
                 authorities.add(new SimpleGrantedAuthority(securityAuthority.getCode()));
             }
         }

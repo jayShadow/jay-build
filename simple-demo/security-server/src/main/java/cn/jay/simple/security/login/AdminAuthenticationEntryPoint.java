@@ -22,7 +22,7 @@ public class AdminAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
         // 未登录 或 token过期
-        if (e!=null){
+        if (e != null) {
 //            ResponseUtils.out(response, ApiResult.expired(e.getMessage()));
         } else {
 //            ResponseUtils.out(response, ApiResult.expired("jwtToken过期!"));

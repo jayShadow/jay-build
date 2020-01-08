@@ -99,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         AuthenticationProvider smsCodeAuthenticationProvider =
                 new SmsCodeAuthenticationProvider(mobileService);
         auth.authenticationProvider(commonAuthenticationProvider)
-            .authenticationProvider(smsCodeAuthenticationProvider);
+                .authenticationProvider(smsCodeAuthenticationProvider);
     }
 
     @Override

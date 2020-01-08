@@ -5,5 +5,4 @@
 <mapper namespace="cn.jay.simple.security.mapper.LoginUserMapper">
 
 
-
 </mapper>
