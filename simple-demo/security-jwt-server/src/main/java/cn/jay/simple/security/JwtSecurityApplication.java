@@ -12,10 +12,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 @EnableConfigurationProperties({ConfigProperties.class})
 @MapperScan("cn.jay.simple.security.mapper")
-public class SecuritySimpleApplication {
+public class JwtSecurityApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SecuritySimpleApplication.class, args);
+        SpringApplication.run(JwtSecurityApplication.class, args);
     }
 
 }
