@@ -106,8 +106,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.antMatcher("/**").authorizeRequests();
-        // 禁用sessionAdminAuthenticationEntryPoint
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            .maximumSessions(2)                 //最大session数量2
+            .maxSessionsPreventsLogin(true);    //最大session时阻止登陆
         // 禁用CSRF 开启跨域
         http.csrf().disable().cors();
 
@@ -132,7 +134,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterAt(commonAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAt(smsCodeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationTokenFilter, BasicAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthenticationTokenFilter, BasicAuthenticationFilter.class);
     }
 
 }
