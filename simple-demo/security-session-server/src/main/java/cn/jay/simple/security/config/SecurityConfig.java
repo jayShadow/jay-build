@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -79,6 +80,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
     private void setAuthenticationHandler(AbstractAuthenticationProcessingFilter filter) throws Exception {
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
@@ -109,7 +116,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             .maximumSessions(2)                 //最大session数量2
-            .maxSessionsPreventsLogin(true);    //最大session时阻止登陆
+            .maxSessionsPreventsLogin(true)
+//            .and().
+        ;    //最大session时阻止登陆
         // 禁用CSRF 开启跨域
         http.csrf().disable().cors();
 

@@ -16,6 +16,7 @@ spring:
     password: abc=123
   session:
     store-type: redis
+    timeout: 3600
   redis:
     host: 127.0.0.1
     port: 6379

@@ -11,5 +11,11 @@
 
     <groupId>cn.jay</groupId>
     <artifactId>cloud-demo</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>oauth2-bean</module>
+        <module>oauth2-auth-server</module>
+    </modules>
 
 </project>
