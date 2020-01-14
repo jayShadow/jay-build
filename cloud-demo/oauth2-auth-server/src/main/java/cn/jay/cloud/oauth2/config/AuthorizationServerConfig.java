@@ -30,6 +30,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.checkTokenAccess("isAuthenticated()");
         security.allowFormAuthenticationForClients(); // 允许url添加client_id及client_secret进行客户端验证
     }
 
