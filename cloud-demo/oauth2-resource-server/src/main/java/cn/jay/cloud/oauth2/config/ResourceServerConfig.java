@@ -38,7 +38,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         tokenService.setCheckTokenEndpointUrl(URL);
         tokenService.setClientId("identity");
         tokenService.setClientSecret("123456");
-        resources.resourceId("resource1");
+        resources.resourceId("resource-identity");
         resources.tokenServices(tokenService);
     }
 

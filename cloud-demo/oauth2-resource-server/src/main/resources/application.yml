@@ -15,11 +15,6 @@ security:
 config:
   #安全认证
   auth:
-    secret: privateSecret
-    tokenExpireTime: 3600000             # token过期时间（分钟）
-    rememberMeExpireTime: 7         # 用户选择保存登录状态对应token过期时间（天）
-    loginTimeLimit: 10              # 限制用户登陆错误次数（次）
-    loginAfterTime: 10              # 错误超过次数后多少分钟后才能继续登录（分钟）
     ignoreUrls:
       - /api/system/user/getCurrentUserInfo
       - /index
