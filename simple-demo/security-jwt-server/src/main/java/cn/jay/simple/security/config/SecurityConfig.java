@@ -54,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     public SecurityConfig(JwtTokenUtil jwtTokenUtil, ConfigProperties configProperties,
-                          @Qualifier("userPwdServiceImpl") UserDetailsService usernameService,
-                          @Qualifier("smsCodeServiceImpl") UserDetailsService mobileService,
+                          @Qualifier("userPwdService") UserDetailsService usernameService,
+                          @Qualifier("smsCodeService") UserDetailsService mobileService,
                           JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.objectMapper = objectMapper;

@@ -52,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     public SecurityConfig(ConfigProperties configProperties,
-                          @Qualifier("userPwdServiceImpl") UserDetailsService usernameService,
-                          @Qualifier("smsCodeServiceImpl") UserDetailsService mobileService,
+                          @Qualifier("userPwdService") UserDetailsService usernameService,
+                          @Qualifier("smsCodeService") UserDetailsService mobileService,
                           JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.mobileService = mobileService;
@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserPwdAuthenticationFilter commonAuthenticationFilter() throws Exception {
+    public UserPwdAuthenticationFilter userPwdAuthenticationFilter() throws Exception {
         UserPwdAuthenticationFilter filter = new UserPwdAuthenticationFilter();
         setAuthenticationHandler(filter);
         return filter;
@@ -141,7 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
         });
 
-        http.addFilterAt(commonAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(userPwdAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAt(smsCodeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 //        http.addFilterBefore(jwtAuthenticationTokenFilter, BasicAuthenticationFilter.class);
     }

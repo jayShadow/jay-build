@@ -47,16 +47,16 @@
         </dependency>
 
         <!-- ========================= 数据库相关 ========================== -->
-        <dependency>
+        <!--<dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!-- 阿里数据库连接池 -->
+        &lt;!&ndash; 阿里数据库连接池 &ndash;&gt;
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.20</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

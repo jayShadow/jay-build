@@ -1,5 +1,6 @@
 package cn.jay.cloud.oauth2.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,9 +15,17 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
  * @Author: Jay
  * @Date: 2020/1/13 16:28
  */
+@Slf4j
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+    private final AuthenticationManager authenticationManager;
+
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+        log.info("=======init AuthorizationServerConfig finish==========");
+    }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -44,8 +53,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-//        endpoints.authenticationManager(new ProviderManager() {
-//
-//        });
+        endpoints.authenticationManager(authenticationManager);
     }
 }
