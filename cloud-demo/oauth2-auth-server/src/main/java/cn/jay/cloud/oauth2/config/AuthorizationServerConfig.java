@@ -37,7 +37,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("identity")
+                .withClient("identity").resourceIds("resource-identity")
                 .secret(new BCryptPasswordEncoder().encode("123456"))
                 .authorizedGrantTypes("password", "authorization_code", "implicit")
                 .scopes("all","demo")
