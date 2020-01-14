@@ -2,6 +2,7 @@ package cn.jay.cloud.oauth2.controller;
 
 import cn.jay.simple.security.bean.LoginUser;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +26,16 @@ public class DemoController {
         return "#add_user# success =====by:";
     }
 
-    @GetMapping("/update")
-    @PreAuthorize("hasAuthority('update_user')")
+    @GetMapping("/delete")
+    @PreAuthorize("hasAuthority('delete_user')")
     public String update() {
-        return "/demo/update";
+        return "/demo/delete";
+    }
+
+    @GetMapping("/update")
+    @PreAuthorize("hasAuthority('add_user')")
+    public Authentication authentication(Authentication authentication) {
+        return authentication;
     }
 
 }

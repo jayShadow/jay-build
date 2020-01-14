@@ -43,7 +43,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("all")
                 .redirectUris("http://localhost:8080")
                 .autoApprove(false)
-
                 .and()
                 .withClient("client_book")
                 .secret(new BCryptPasswordEncoder().encode("123456"))
