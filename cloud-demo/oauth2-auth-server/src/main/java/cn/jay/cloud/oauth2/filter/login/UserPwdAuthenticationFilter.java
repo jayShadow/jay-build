@@ -1,8 +1,8 @@
 package cn.jay.cloud.oauth2.filter.login;
 
-import cn.jay.cloud.oauth2.token.UserPwdAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -30,7 +30,7 @@ public class UserPwdAuthenticationFilter extends AbstractAuthenticationProcessin
         if (password == null) {
             throw new InternalAuthenticationServiceException("Failed to get the password");
         }
-        return this.getAuthenticationManager().authenticate(new UserPwdAuthenticationToken(username, password));
+        return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 
 

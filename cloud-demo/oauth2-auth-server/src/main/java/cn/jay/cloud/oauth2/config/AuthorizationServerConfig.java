@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -29,23 +30,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        super.configure(security);
+        security.allowFormAuthenticationForClients(); // 允许url添加client_id及client_secret进行客户端验证
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("identity")
-                .secret("123456")
-                .authorizedGrantTypes("password", "authorization_code")
+                .secret(new BCryptPasswordEncoder().encode("123456"))
+                .authorizedGrantTypes("password", "authorization_code", "implicit")
                 .scopes("all")
                 .redirectUris("http://localhost:8080")
                 .autoApprove(false)
 
                 .and()
                 .withClient("client_book")
-                .secret("123456")
-                .authorizedGrantTypes("password")
+                .secret(new BCryptPasswordEncoder().encode("123456"))
+                .authorizedGrantTypes("client_credentials")
                 .scopes("all")
                 .redirectUris("http://localhost:8080")
                 .autoApprove(false);
