@@ -2,6 +2,7 @@ package cn.jay.cloud.oauth2.controller;
 
 import cn.jay.simple.security.bean.LoginUser;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ public class UserController {
 
     @GetMapping("/")
     @PreAuthorize("hasAuthority('add_user')")
-    public LoginUser add(@AuthenticationPrincipal LoginUser loginUser, HttpServletRequest request) {
+    public LoginUser add(@AuthenticationPrincipal LoginUser loginUser, HttpServletRequest request, Authentication authentication) {
         HttpSession session = request.getSession();
         return loginUser;
     }

@@ -40,7 +40,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("identity")
                 .secret(new BCryptPasswordEncoder().encode("123456"))
                 .authorizedGrantTypes("password", "authorization_code", "implicit")
-                .scopes("all")
+                .scopes("all","demo")
                 .redirectUris("http://localhost:8080")
                 .autoApprove(false)
                 .and()
