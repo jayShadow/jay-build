@@ -3,9 +3,9 @@ server:
 
 spring:
   application:
-    name: oauth2-auth-server-demo
+    name: oauth2-auth-server
   profiles:
-    include: mybatis
+    include: mybatis,security
 
 
 config:
@@ -29,7 +29,3 @@ config:
       - /**/*.css
       - /**/*.png
       - /**/*.ico
-security:
-  oauth2:
-    authorization:
-      check-token-access:

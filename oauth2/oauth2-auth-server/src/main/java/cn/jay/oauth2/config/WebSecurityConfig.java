@@ -1,9 +1,9 @@
 package cn.jay.oauth2.config;
 
 import cn.jay.oauth2.ConfigProperties;
-import cn.jay.oauth2.filter.login.SmsCodeAuthenticationFilter;
-import cn.jay.oauth2.filter.login.UserPwdAuthenticationFilter;
-import cn.jay.oauth2.filter.token.JwtAuthenticationTokenFilter;
+import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
+import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
+import cn.jay.security.filter.token.AuthenticationTokenFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ConfigProperties configProperties;
 
-    private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private final AuthenticationTokenFilter authenticationTokenFilter;
 
     private final UserPwdAuthenticationFilter userPwdAuthenticationFilter;
 
@@ -39,12 +39,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public WebSecurityConfig(ConfigProperties configProperties,
                              UserPwdAuthenticationFilter userPwdAuthenticationFilter,
                              SmsCodeAuthenticationFilter smsCodeAuthenticationFilter,
-                             JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper) {
+                             AuthenticationTokenFilter authenticationTokenFilter, ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.userPwdAuthenticationFilter = userPwdAuthenticationFilter;
         this.smsCodeAuthenticationFilter = smsCodeAuthenticationFilter;
         this.configProperties = configProperties;
-        this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
+        this.authenticationTokenFilter = authenticationTokenFilter;
         log.info("=======init WebSecurityConfig finish==========");
     }
 

@@ -2,75 +2,79 @@ package cn.jay.oauth2.bean;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @Author: Jay
- * @Date: 2020/1/13 16:15
- */
-public class AppClient implements ClientDetails {
+
+public class Oauth2Client implements ClientDetails {
+
+    private transient ClientDetail clientDetail;
+
+    public Oauth2Client(ClientDetail clientDetail) {
+        this.clientDetail = clientDetail;
+    }
 
     @Override
     public String getClientId() {
-        return null;
+        return clientDetail.getClientId();
     }
 
     @Override
     public Set<String> getResourceIds() {
-        return null;
+        return clientDetail.getResourceIds();
     }
 
     @Override
     public boolean isSecretRequired() {
-        return false;
+        return clientDetail.isSecretRequired();
     }
 
     @Override
     public String getClientSecret() {
-        return null;
+        return clientDetail.getClientSecret();
     }
 
     @Override
     public boolean isScoped() {
-        return false;
+        return clientDetail.isScoped();
     }
 
     @Override
     public Set<String> getScope() {
-        return null;
+        return clientDetail.getScope();
     }
 
     @Override
     public Set<String> getAuthorizedGrantTypes() {
-        return null;
+        return clientDetail.getAuthorizedGrantTypes();
     }
 
     @Override
     public Set<String> getRegisteredRedirectUri() {
-        return null;
+        return clientDetail.getRegisteredRedirectUri();
     }
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return null;
+        return clientDetail.getAuthorities();
     }
 
     @Override
     public Integer getAccessTokenValiditySeconds() {
-        return null;
+        return clientDetail.getAccessTokenValiditySeconds();
     }
 
     @Override
     public Integer getRefreshTokenValiditySeconds() {
-        return null;
+        return clientDetail.getRefreshTokenValiditySeconds();
     }
 
     @Override
     public boolean isAutoApprove(String scope) {
-        return false;
+        return CollectionUtils.isEmpty(clientDetail.getAutoApproveScope())? false: clientDetail.getAutoApproveScope().contains(scope);
     }
 
     @Override

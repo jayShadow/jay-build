@@ -12,9 +12,11 @@
     <groupId>cn.jay</groupId>
     <artifactId>oauth2</artifactId>
     <packaging>pom</packaging>
-
+    <name>8.oauth2</name>
     <modules>
         <module>oauth2-bean</module>
+        <module>oauth2-service</module>
+
         <module>oauth2-auth-server</module>
         <module>oauth2-resource-server</module>
     </modules>

@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
@@ -28,14 +29,17 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+//    private final AuthorizationServerTokenServices tokenServices;
+
+    private final ClientDetailsService clientDetailsService;
+
     private final AuthenticationManager authenticationManager;
 
-    private final TokenStore tokenStore;
-
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager,
-                                     TokenStore tokenStore) {
+    public AuthorizationServerConfig(ClientDetailsService clientDetailsService,
+                                     AuthenticationManager authenticationManager) {
+//        this.tokenServices = tokenServices;
+        this.clientDetailsService = clientDetailsService;
         this.authenticationManager = authenticationManager;
-        this.tokenStore = tokenStore;
         log.info("=======init AuthorizationServerConfig finish==========");
     }
 
@@ -47,25 +51,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("identity").resourceIds("resource-identity")
-                .secret(new BCryptPasswordEncoder().encode("123456"))
-                .authorizedGrantTypes("password", "authorization_code", "implicit")
-                .scopes("all", "demo")
-                .redirectUris("http://localhost:8080")
-                .autoApprove(false)
-                .and()
-                .withClient("client_book")
-                .secret(new BCryptPasswordEncoder().encode("123456"))
-                .authorizedGrantTypes("client_credentials")
-                .scopes("all")
-                .redirectUris("http://localhost:8080")
-                .autoApprove(false);
+        clients.withClientDetails(clientDetailsService);
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
-//        endpoints.tokenServices();
     }
 }
