@@ -2,11 +2,11 @@ package cn.jay.security.provider;
 
 import cn.jay.security.bean.SecurityUser;
 import cn.jay.security.token.SmsCodeAuthenticationToken;
-import cn.jay.security.token.UserPwdAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,7 +30,7 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        UserPwdAuthenticationToken token = (UserPwdAuthenticationToken) authentication;
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
         SecurityUser loadedUser = (SecurityUser) userDetailsService.loadUserByUsername(token.getName());
         if (loadedUser == null) {
             throw new InternalAuthenticationServiceException(
@@ -49,7 +49,7 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
     }
 
     protected Authentication createSuccessAuthentication(SecurityUser loadedUser, Authentication authentication) {
-        SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(
+        UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(
                 loadedUser.getLoginUser(), authentication.getCredentials(), loadedUser.getAuthorities());
         result.setDetails(authentication.getDetails());
         return result;
@@ -57,7 +57,7 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return (UserPwdAuthenticationToken.class.isAssignableFrom(authentication));
+        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
 
 }

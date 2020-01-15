@@ -16,6 +16,7 @@
     <modules>
         <module>security-bean</module>
         <module>security-service</module>
+        <module>security-config</module>
 
         <module>security-jwt-server</module>
         <module>security-session-server</module>

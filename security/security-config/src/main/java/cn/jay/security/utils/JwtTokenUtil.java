@@ -1,11 +1,11 @@
 package cn.jay.security.utils;
 
-import cn.jay.security.ConfigProperties;
 import cn.jay.security.bean.LoginUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +27,12 @@ public class JwtTokenUtil {
 
     private final Long rememberMeExpireTime;
 
-    public JwtTokenUtil(ConfigProperties configProperties) {
-        this.secret = configProperties.getAuth().getSecret();
-        this.tokenExpireTime = configProperties.getAuth().getTokenExpireTime();
-        this.rememberMeExpireTime = configProperties.getAuth().getRememberMeExpireTime();
+    public JwtTokenUtil(@Value("${security.jwt.secret}") String secret,
+                        @Value("${security.jwt.tokenExpireMinute}") Long tokenExpireMinute,
+                        @Value("${security.jwt.rememberMeExpireDay}") Integer rememberMeExpireDay) {
+        this.secret = secret;
+        this.tokenExpireTime = tokenExpireMinute * 60 * 1000;
+        this.rememberMeExpireTime = rememberMeExpireDay * 24 * 3600 * 1000L;
         log.info("JwtTokenUtil init success");
     }
 

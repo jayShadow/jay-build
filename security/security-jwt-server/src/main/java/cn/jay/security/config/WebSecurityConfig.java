@@ -3,7 +3,7 @@ package cn.jay.security.config;
 import cn.jay.security.ConfigProperties;
 import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
-import cn.jay.security.filter.token.JwtAuthenticationTokenFilter;
+import cn.jay.security.filter.token.AuthenticationTokenFilter;
 import cn.jay.security.provider.SmsCodeAuthenticationProvider;
 import cn.jay.security.utils.JwtTokenUtil;
 import cn.jay.security.bean.LoginUser;
@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenUtil jwtTokenUtil;
 
@@ -51,18 +51,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ConfigProperties configProperties;
 
-    private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private final AuthenticationTokenFilter authenticationTokenFilter;
 
-    public SecurityConfig(JwtTokenUtil jwtTokenUtil, ConfigProperties configProperties,
-                          @Qualifier("userPwdService") UserDetailsService usernameService,
-                          @Qualifier("smsCodeService") UserDetailsService mobileService,
-                          JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, ObjectMapper objectMapper) {
+
+    public WebSecurityConfig(JwtTokenUtil jwtTokenUtil, ConfigProperties configProperties,
+                             @Qualifier("userPwdService") UserDetailsService usernameService,
+                             @Qualifier("smsCodeService") UserDetailsService mobileService,
+                             AuthenticationTokenFilter authenticationTokenFilter,
+                             ObjectMapper objectMapper) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.objectMapper = objectMapper;
         this.mobileService = mobileService;
         this.usernameService = usernameService;
         this.configProperties = configProperties;
-        this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
+        this.authenticationTokenFilter = authenticationTokenFilter;
     }
 
     public PasswordEncoder passwordEncoder() {
@@ -136,7 +138,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterAt(commonAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAt(smsCodeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationTokenFilter, BasicAuthenticationFilter.class);
+        http.addFilterBefore(authenticationTokenFilter, BasicAuthenticationFilter.class);
     }
 
 }

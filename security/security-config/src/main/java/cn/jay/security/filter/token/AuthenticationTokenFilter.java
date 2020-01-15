@@ -2,11 +2,11 @@ package cn.jay.security.filter.token;
 
 import cn.jay.security.bean.SecurityUser;
 import cn.jay.security.utils.JwtTokenUtil;
-import cn.jay.security.token.UserPwdAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -24,13 +24,13 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
+public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
 
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationTokenFilter(JwtTokenUtil jwtTokenUtil, @Qualifier("userPwdService") UserDetailsService userDetailsService) {
+    public AuthenticationTokenFilter(JwtTokenUtil jwtTokenUtil, @Qualifier("userPwdService") UserDetailsService userDetailsService) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
     }
@@ -43,9 +43,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 SecurityUser loadedUser = (SecurityUser) userDetailsService.loadUserByUsername(username);
                 if (jwtTokenUtil.validateToken(token, loadedUser)) {
-                    UserPwdAuthenticationToken authentication = new UserPwdAuthenticationToken(loadedUser.getLoginUser(), null, loadedUser.getAuthorities());
-//                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    // 将 authentication 存入 ThreadLocal，方便后续获取用户信息
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loadedUser.getLoginUser(), null, loadedUser.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
