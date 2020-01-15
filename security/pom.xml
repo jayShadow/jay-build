@@ -12,14 +12,15 @@
     <groupId>cn.jay</groupId>
     <artifactId>security</artifactId>
     <packaging>pom</packaging>
+    <name>2.security</name>
 
     <modules>
         <module>security-bean</module>
         <module>security-service</module>
         <module>security-config</module>
 
-        <module>security-jwt-server</module>
-        <module>security-session-server</module>
+        <module>security-jwt-application</module>
+        <module>security-session-application</module>
     </modules>
 
 </project>

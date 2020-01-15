@@ -11,6 +11,7 @@
 
     <groupId>cn.jay</groupId>
     <artifactId>security-service</artifactId>
+    <name>4.security-service</name>
 
     <dependencies>
         <dependency>

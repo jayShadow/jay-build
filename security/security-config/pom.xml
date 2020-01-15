@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>security-config</artifactId>
-
+    <name>5.security-config</name>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

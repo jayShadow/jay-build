@@ -10,8 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.jay</groupId>
-    <artifactId>security-jwt-server</artifactId>
-
+    <artifactId>security-jwt-application</artifactId>
+    <name>6.security-jwt-application</name>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -11,7 +11,7 @@
 
     <groupId>cn.jay</groupId>
     <artifactId>security-bean</artifactId>
-    <name>2.security-bean</name>
+    <name>3.security-bean</name>
 
     <dependencies>
         <dependency>

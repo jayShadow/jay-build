@@ -8,14 +8,15 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>security-session-server</artifactId>
-
+    <artifactId>security-session-application</artifactId>
+    <name>7.security-session-application</name>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- spring-boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -26,29 +27,36 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+        <!-- spring-session -->
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
+
+        <!-- spring-security -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
         </dependency>
 
+        <!-- project module -->
+        <dependency>
+            <groupId>cn.jay</groupId>
+            <artifactId>security-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- third package -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.jay</groupId>
-            <artifactId>security-service</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
