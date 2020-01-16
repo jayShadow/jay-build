@@ -3,6 +3,9 @@ mybatis-plus:
   type-handlers-package: cn.jay.mybatis.type
   configuration:
     default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
+    map-underscore-to-camel-case: true
+    auto-mapping-unknown-column-behavior: warning
+    cache-enabled: false
 
 spring:
   datasource:

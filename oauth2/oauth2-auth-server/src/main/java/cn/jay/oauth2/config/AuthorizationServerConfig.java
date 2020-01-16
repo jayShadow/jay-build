@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 
 /**
  * @Author: Jay
@@ -23,10 +24,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private final ClientDetailsService clientDetailsService;
 
+    private final AuthorizationServerTokenServices tokenServices;
+
     private final AuthenticationManager authenticationManager;
 
     public AuthorizationServerConfig(@Qualifier("clientService") ClientDetailsService clientDetailsService,
+                                     AuthorizationServerTokenServices tokenServices,
                                      AuthenticationManager authenticationManager) {
+        this.tokenServices = tokenServices;
         this.clientDetailsService = clientDetailsService;
         this.authenticationManager = authenticationManager;
         log.info("=======init AuthorizationServerConfig finish==========");
@@ -41,24 +46,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(clientDetailsService);
-//        clients.inMemory()
-//                .withClient("identity")
-//                .secret(new BCryptPasswordEncoder().encode("123456"))
-//                .authorizedGrantTypes("password", "authorization_code", "implicit")
-//                .scopes("all")
-//                .redirectUris("http://localhost:8080")
-//                .autoApprove(false)
-//                .and()
-//                .withClient("client_book")
-//                .secret(new BCryptPasswordEncoder().encode("123456"))
-//                .authorizedGrantTypes("client_credentials")
-//                .scopes("all")
-//                .redirectUris("http://localhost:8080")
-//                .autoApprove(false);
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.tokenServices(tokenServices);
         endpoints.authenticationManager(authenticationManager);
     }
 }
