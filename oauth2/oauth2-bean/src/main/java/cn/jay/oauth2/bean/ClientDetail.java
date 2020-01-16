@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -35,7 +36,7 @@ public class ClientDetail extends BaseCommonEntity {
     private String clientId;
 
     @ApiModelProperty(value = "客户端对应资源ID", position = 14)
-    private Set<String> resourceIds;
+    private Set<String> resourceIds = new HashSet<>();
 
     @ApiModelProperty(value = "是否需要密码", position = 15)
     private boolean secretRequired;
@@ -47,16 +48,16 @@ public class ClientDetail extends BaseCommonEntity {
     private boolean scoped;
 
     @ApiModelProperty(value = "scope", position = 18)
-    private Set<String> scope;
+    private Set<String> scope = new HashSet<>();
 
     @ApiModelProperty(value = "授权方式(授权码，简易，密码，客户端凭据)", position = 19)
-    private Set<String> authorizedGrantTypes;
+    private Set<String> authorizedGrantTypes = new HashSet<>();
 
     @ApiModelProperty(value = "注册转跳uri", position = 20)
-    private Set<String> registeredRedirectUri;
+    private Set<String> registeredRedirectUri = new HashSet<>();
 
     @ApiModelProperty(value = "权限", position = 21)
-    private Collection<GrantedAuthority> authorities;
+    private Set<String> authorities = new HashSet<>();
 
     @ApiModelProperty(value = "token有效时间", position = 22)
     private Integer accessTokenValiditySeconds;
@@ -65,7 +66,7 @@ public class ClientDetail extends BaseCommonEntity {
     private Integer refreshTokenValiditySeconds;
 
     @ApiModelProperty(value = "自动同意scope", position = 24)
-    private Set<String> autoApproveScope;
+    private Set<String> autoApproveScope = new HashSet<>();
 
     @ApiModelProperty(value = "额外信息", position = 25)
     private String additionalInformation;

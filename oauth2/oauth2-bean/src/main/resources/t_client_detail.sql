@@ -25,6 +25,7 @@ CREATE TABLE `t_client_detail` (
   `resource_ids` varchar(255) NOT NULL,
   `secret_required` tinyint(4) NOT NULL DEFAULT '0',
   `client_secret` varchar(255) NOT NULL,
+  `scope` varchar(255) NOT NULL,
   `scoped` tinyint(4) NOT NULL DEFAULT '0',
   `authorized_grant_types` varchar(255) NOT NULL,
   `registered_redirect_uri` varchar(255) NOT NULL,

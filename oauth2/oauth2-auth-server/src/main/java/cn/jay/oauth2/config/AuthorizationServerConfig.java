@@ -1,6 +1,7 @@
 package cn.jay.oauth2.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,14 +21,13 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-//    private final ClientDetailsService clientDetailsService;
+    private final ClientDetailsService clientDetailsService;
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthorizationServerConfig(
-//            ClientDetailsService clientDetailsService,
+    public AuthorizationServerConfig(@Qualifier("clientService") ClientDetailsService clientDetailsService,
                                      AuthenticationManager authenticationManager) {
-//        this.clientDetailsService = clientDetailsService;
+        this.clientDetailsService = clientDetailsService;
         this.authenticationManager = authenticationManager;
         log.info("=======init AuthorizationServerConfig finish==========");
     }
@@ -40,21 +40,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.withClientDetails(clientDetailsService);
-        clients.inMemory()
-                .withClient("identity")
-                .secret(new BCryptPasswordEncoder().encode("123456"))
-                .authorizedGrantTypes("password", "authorization_code", "implicit")
-                .scopes("all")
-                .redirectUris("http://localhost:8080")
-                .autoApprove(false)
-                .and()
-                .withClient("client_book")
-                .secret(new BCryptPasswordEncoder().encode("123456"))
-                .authorizedGrantTypes("client_credentials")
-                .scopes("all")
-                .redirectUris("http://localhost:8080")
-                .autoApprove(false);
+        clients.withClientDetails(clientDetailsService);
+//        clients.inMemory()
+//                .withClient("identity")
+//                .secret(new BCryptPasswordEncoder().encode("123456"))
+//                .authorizedGrantTypes("password", "authorization_code", "implicit")
+//                .scopes("all")
+//                .redirectUris("http://localhost:8080")
+//                .autoApprove(false)
+//                .and()
+//                .withClient("client_book")
+//                .secret(new BCryptPasswordEncoder().encode("123456"))
+//                .authorizedGrantTypes("client_credentials")
+//                .scopes("all")
+//                .redirectUris("http://localhost:8080")
+//                .autoApprove(false);
     }
 
     @Override

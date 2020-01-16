@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableConfigurationProperties({ConfigProperties.class})
 @MapperScan("cn.jay.security.mapper")
-@ComponentScan({"cn.jay.security","cn.jay.oauth2"})
+@ComponentScan({"cn.jay.security","cn.jay.oauth2","cn.jay.mybatis"})
 public class AuthServerApplication {
 
     public static void main(String[] args) {

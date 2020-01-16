@@ -1,20 +1,20 @@
-package security.service.impl;
+package cn.jay.security.service.impl;
 
 import cn.jay.oauth2.bean.ClientDetail;
 import cn.jay.oauth2.bean.Oauth2Client;
+import cn.jay.security.mapper.ClientDetailMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Service;
-import security.mapper.ClientDetailMapper;
 
-@Service("clientDetailsService")
-public class ClientDetailServiceImpl implements ClientDetailsService {
+@Service("clientService")
+public class ClientServiceImpl implements ClientDetailsService {
 
     private final ClientDetailMapper clientDetailMapper;
 
-    public ClientDetailServiceImpl(ClientDetailMapper clientDetailMapper) {
+    public ClientServiceImpl(ClientDetailMapper clientDetailMapper) {
         this.clientDetailMapper = clientDetailMapper;
     }
 

@@ -1,5 +1,6 @@
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*Mapper.xml
+  type-handlers-package: cn.jay.mybatis.type
   configuration:
     default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
 

@@ -1,4 +1,4 @@
-package security.mapper;
+package cn.jay.security.mapper;
 
 import cn.jay.oauth2.bean.ClientDetail;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

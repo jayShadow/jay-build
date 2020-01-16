@@ -3,6 +3,7 @@ package cn.jay.mybatis.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +14,13 @@ import java.time.LocalDateTime;
  * @Author: Jay
  * @Date: 2020/1/16 12:03
  */
+@Slf4j
 @Configuration
 public class MybatisPlusConfig {
 
+    public MybatisPlusConfig() {
+        log.info("=======init MybatisPlusConfig finish==========");
+    }
 
     @Bean
     public PaginationInterceptor paginationInterceptor() {

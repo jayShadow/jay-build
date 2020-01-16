@@ -1,10 +1,12 @@
 package cn.jay.oauth2.bean;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,7 +61,13 @@ public class Oauth2Client implements ClientDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return clientDetail.getAuthorities();
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (!CollectionUtils.isEmpty(clientDetail.getAuthorities())) {
+            for (String authority : clientDetail.getAuthorities()) {
+                authorities.add(new SimpleGrantedAuthority(authority));
+            }
+        }
+        return authorities;
     }
 
     @Override

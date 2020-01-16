@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @Author: Jay
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 @EnableConfigurationProperties({ConfigProperties.class})
 @MapperScan("cn.jay.security.mapper")
+@ComponentScan({"cn.jay.security","cn.jay.mybatis"})
 public class SessionSecurityApplication {
 
     public static void main(String[] args) {
