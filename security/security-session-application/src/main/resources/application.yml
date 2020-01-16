@@ -12,7 +12,7 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-#    password: abc123
+    password: abc123
 
 config:
   #安全认证

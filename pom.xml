@@ -9,6 +9,7 @@
         <module>common-bean</module>
         <module>security</module>
         <module>oauth2</module>
+        <module>mybatis-plus-config</module>
     </modules>
     <packaging>pom</packaging>
     <name>0.security-demo</name>

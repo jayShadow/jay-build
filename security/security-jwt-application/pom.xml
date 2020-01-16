@@ -45,6 +45,11 @@
             <artifactId>security-config</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.jay</groupId>
+            <artifactId>mybatis-plus-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
