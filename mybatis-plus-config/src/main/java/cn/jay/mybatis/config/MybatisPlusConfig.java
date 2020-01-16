@@ -2,7 +2,7 @@ package cn.jay.mybatis.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
-import com.sun.org.apache.bcel.internal.classfile.LocalVariable;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +15,14 @@ import java.time.LocalDateTime;
  */
 @Configuration
 public class MybatisPlusConfig {
+
+
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        PaginationInterceptor page = new PaginationInterceptor();
+        page.setDialectType("mysql");
+        return page;
+    }
 
     /**
      * 乐观锁
