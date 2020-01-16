@@ -35,10 +35,10 @@ public class UserPwdServiceImpl implements UserDetailsService {
         QueryWrapper<LoginUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(LoginUser::getUsername, username);
         LoginUser loginUser = loginUserMapper.selectOne(queryWrapper);
-        if (loginUser != null) {
-            return new SecurityUser(loginUser, loadUserAuthorities());
+        if (loginUser == null) {
+            throw new UsernameNotFoundException("用户名不存在");
         }
-        return null;
+        return new SecurityUser(loginUser, loadUserAuthorities());
     }
 
     private Set<SecurityAuthority> loadUserAuthorities() {

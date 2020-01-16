@@ -23,10 +23,10 @@ public class ClientServiceImpl implements ClientDetailsService {
         QueryWrapper<ClientDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(ClientDetail::getClientId, clientId);
         ClientDetail clientDetail = clientDetailMapper.selectOne(queryWrapper);
-        if (clientDetail != null) {
-            return new Oauth2Client(clientDetail);
+        if (clientDetail == null) {
+            throw new ClientRegistrationException("该客户端不存在");
         }
-        return null;
+        return new Oauth2Client(clientDetail);
     }
 
 }

@@ -35,10 +35,10 @@ public class SmsCodeServiceImpl implements UserDetailsService {
         QueryWrapper<LoginUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(LoginUser::getMobile, mobile);
         LoginUser loginUser = loginUserMapper.selectOne(queryWrapper);
-        if (loginUser != null) {
-            return new SecurityUser(loginUser, loadUserAuthorities());
+        if (loginUser == null) {
+            throw new UsernameNotFoundException("手机号不存在");
         }
-        return null;
+        return new SecurityUser(loginUser, loadUserAuthorities());
     }
 
     private Set<SecurityAuthority> loadUserAuthorities() {
