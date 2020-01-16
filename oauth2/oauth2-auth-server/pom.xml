@@ -18,32 +18,48 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- spring-boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
+        <!-- spring-security-oauth2 -->
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
         </dependency>
+
+        <!-- project module -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>cn.jay</groupId>
+            <artifactId>mybatis-plus-config</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.jay</groupId>
             <artifactId>security-config</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>cn.jay</groupId>
             <artifactId>oauth2-service</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <!-- third package -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 </project>
