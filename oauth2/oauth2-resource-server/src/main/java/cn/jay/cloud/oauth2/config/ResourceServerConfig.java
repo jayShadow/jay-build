@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 //import org.springframework.security.oauth2.config.annotation.web.configuration.*;
@@ -20,9 +24,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Slf4j
 @Configuration
-//@EnableResourceServer
+@EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final String URL = "http://localhost:9090/oauth/check_token";
 
@@ -33,15 +37,15 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
         log.info("=======init ResourceServerConfig finish==========");
     }
 
-//    @Override
-//    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-//        RemoteTokenServices tokenService = new RemoteTokenServices();
-//        tokenService.setCheckTokenEndpointUrl(URL);
-//        tokenService.setClientId("identity");
-//        tokenService.setClientSecret("123456");
-//        resources.resourceId("resource-identity");
-//        resources.tokenServices(tokenService);
-//    }
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        RemoteTokenServices tokenService = new RemoteTokenServices();
+        tokenService.setCheckTokenEndpointUrl(URL);
+        tokenService.setClientId("client1");
+        tokenService.setClientSecret("123456");
+        resources.resourceId("resource1");
+        resources.tokenServices(tokenService);
+    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
