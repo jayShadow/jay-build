@@ -1,11 +1,16 @@
 package cn.jay.oauth2.config;
 
+import cn.jay.security.service.impl.UserPwdServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -19,12 +24,14 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.security.KeyPair;
+import java.util.*;
 
 /**
  * @Author: Jay
@@ -37,19 +44,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private final ClientDetailsService clientDetailsService;
 
-//    private final AuthorizationServerTokenServices tokenServices;
-
     private final AuthenticationManager authenticationManager;
 
-    private final UserDetailsService usernameService;
+    private final UserDetailsService userDetailsService;
 
     public AuthorizationServerConfig(@Qualifier("clientService") ClientDetailsService clientDetailsService,
-                                     @Qualifier("userPwdService") UserDetailsService usernameService,
-//                                     AuthorizationServerTokenServices tokenServices,
+                                     @Qualifier("userPwdService") UserDetailsService userDetailsService,
                                      AuthenticationManager authenticationManager) {
-//        this.tokenServices = tokenServices;
-        this.usernameService = usernameService;
         this.clientDetailsService = clientDetailsService;
+        this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
         log.info("=======init AuthorizationServerConfig finish==========");
     }
@@ -67,7 +70,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Bean
-    public TokenStore tokenStore() {
+    public TokenStore jwtTokenStore() {
         return new JwtTokenStore(accessTokenConverter());
     }
 
@@ -83,7 +86,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore());
+        endpoints.tokenStore(jwtTokenStore());
         endpoints.authenticationManager(authenticationManager);
         endpoints.accessTokenConverter(accessTokenConverter());
     }
