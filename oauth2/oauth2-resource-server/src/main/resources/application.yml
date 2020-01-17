@@ -4,27 +4,14 @@ server:
 spring:
   application:
     name: oauth2-resource-server-demo
-  profiles:
-    include: mybatis
 
 security:
   oauth2:
+    client:
+      client-id: client1
+      client-secret: 123456
     resource:
-      user-info-uri: http://localhost:9090/user/
+#      token-info-uri: http://localhost:9090/oauth/check_token
+      jwt:
+        key-uri: http://localhost:9090/oauth/token_key
 
-config:
-  #安全认证
-  auth:
-    ignoreUrls:
-      - /api/system/user/getCurrentUserInfo
-      - /index
-      - /logout
-      - /swagger-ui.html
-      - /swagger-resources/configuration/ui
-      - /swagger-resources
-      - /v2/api-docs
-      - /swagger-resources/configuration/security
-      - /**/*.js
-      - /**/*.css
-      - /**/*.png
-      - /**/*.ico
