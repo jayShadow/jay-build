@@ -21,7 +21,7 @@ public class DemoController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAuthority('add_user')")
-    public String add(@AuthenticationPrincipal LoginUser loginUser, HttpServletRequest request) {
+    public String add(@AuthenticationPrincipal String loginUser, HttpServletRequest request) {
         HttpSession session = request.getSession();
         return "#add_user# success =====by:";
     }

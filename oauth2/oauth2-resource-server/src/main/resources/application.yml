@@ -12,6 +12,7 @@ security:
       client-secret: 123456
     resource:
 #      token-info-uri: http://localhost:9090/oauth/check_token
+#      user-info-uri: http://localhost:9090/oauth/user/
       jwt:
         key-uri: http://localhost:9090/oauth/token_key
 

@@ -11,6 +11,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 //import org.springframework.security.oauth2.config.annotation.web.configuration.*;
@@ -30,8 +33,19 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 
-    public ResourceServerConfig() {
+    private final JwtAccessTokenConverter tokenConverter;
+
+    public ResourceServerConfig(JwtAccessTokenConverter tokenConverter) {
+        this.tokenConverter = tokenConverter;
         log.info("=======init ResourceServerConfig finish==========");
+    }
+
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+//
+//        tokenConverter.convertAccessToken();
+//        resources.;
     }
 
     @Override
