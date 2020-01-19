@@ -35,24 +35,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-
-    private final JwtAccessTokenConverter tokenConverter;
-
-    public ResourceServerConfig(JwtAccessTokenConverter tokenConverter) {
-        this.tokenConverter = tokenConverter;
+    public ResourceServerConfig() {
         log.info("=======init ResourceServerConfig finish==========");
-    }
-
-
-    @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-
-        tokenConverter.setAccessTokenConverter(new DefaultAccessTokenConverter(){
-            @Override
-            public void setUserTokenConverter(UserAuthenticationConverter userTokenConverter) {
-                super.setUserTokenConverter(userTokenConverter);
-            }
-        });
     }
 
     @Override
