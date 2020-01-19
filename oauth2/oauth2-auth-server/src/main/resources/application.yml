@@ -7,24 +7,22 @@ spring:
   profiles:
     include: mybatis,security
 
-#datasource:
-#  # MySQL在高版本需要指明是否进行SSL连接 解决则加上 &useSSL=false
-#  url: jdbc:mysql://localhost:3306/sv?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
-#  username: root
-#  password: abc=123
+datasource:
+  username: root
+  password: abc=123
 
 config:
   #安全认证
   auth:
     secret: privateSecret
-    tokenExpireTime: 3600000             # token过期时间（分钟）
+    tokenExpireTime: 3600000        # token过期时间（分钟）
     rememberMeExpireTime: 7         # 用户选择保存登录状态对应token过期时间（天）
     loginTimeLimit: 10              # 限制用户登陆错误次数（次）
     loginAfterTime: 10              # 错误超过次数后多少分钟后才能继续登录（分钟）
     ignoreUrls:
-      - /api/system/user/getCurrentUserInfo
-      - /index
+      - /login
       - /logout
+      - /index
       - /swagger-ui.html
       - /swagger-resources/configuration/ui
       - /swagger-resources

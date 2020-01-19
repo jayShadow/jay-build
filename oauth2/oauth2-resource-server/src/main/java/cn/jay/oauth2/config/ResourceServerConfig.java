@@ -1,4 +1,4 @@
-package cn.jay.cloud.oauth2.config;
+package cn.jay.oauth2.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

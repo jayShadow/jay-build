@@ -1,4 +1,4 @@
-package cn.jay.cloud.oauth2.controller;
+package cn.jay.oauth2.controller;
 
 import cn.jay.security.bean.LoginUser;
 import org.springframework.security.access.prepost.PreAuthorize;

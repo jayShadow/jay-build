@@ -1,0 +1,27 @@
+﻿<!doctype html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>授权确认</title>
+    <!--    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" href="css/styles.css">-->
+</head>
+<body>
+
+<div>
+    <h1>授权确认</h1>
+    <h3>是否允许<span th:text="${authorizationRequest.clientId}" />读取信息</h3>
+
+    <form class="form" method="post" th:action="@{/oauth/authorize}">
+        <input type="hidden" name="user_oauth_approval" value="true">
+        <button type="submit">授权</button>
+    </form>
+
+    <form class="form" method="post" th:action="@{/oauth/authorize}">
+        <input type="hidden" name="user_oauth_approval" value="false">
+        <button type="submit">拒绝</button>
+    </form>
+</div>
+
+</body>
+</html>

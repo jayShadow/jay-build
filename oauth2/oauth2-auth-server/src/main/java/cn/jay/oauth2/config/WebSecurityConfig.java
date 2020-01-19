@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().print(objectMapper.writeValueAsString(exception.getMessage()));
+            response.sendRedirect("/login");
         });
         // 登录过后访问无权限的接口时自定义403响应内容
         http.exceptionHandling().accessDeniedHandler((request, response, exception) -> {
