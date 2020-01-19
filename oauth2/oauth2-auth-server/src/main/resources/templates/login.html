@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <h1>登录</h1>
-    <h3 style="color:red" th:if="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}" th:text="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}"></h3>
+    <h3 style="color:red" th:if="${#session != null}" th:text="${#session.getId()}"></h3>
     <form class="form" method="post" th:action="@{/common/login}">
         <input type="text" name="username" placeholder="Username" />
         <input type="password" name="password" placeholder="Password" />
