@@ -20,8 +20,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -82,6 +81,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 new ClassPathResource("server.jks"), "123456".toCharArray())
                 .getKeyPair("oauth2", "changeme".toCharArray());
         converter.setKeyPair(keyPair);
+        // JWT token 不传递 SecurityUser 对象，仅传递 用户名
         return converter;
     }
 

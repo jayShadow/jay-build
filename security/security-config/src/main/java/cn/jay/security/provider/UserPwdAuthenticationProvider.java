@@ -50,7 +50,7 @@ public class UserPwdAuthenticationProvider implements AuthenticationProvider {
 
     protected Authentication createSuccessAuthentication(SecurityUser loadedUser, Authentication authentication) {
         UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(
-                loadedUser.getLoginUser(), authentication.getCredentials(), loadedUser.getAuthorities());
+                loadedUser, authentication.getCredentials(), loadedUser.getAuthorities());
         result.setDetails(authentication.getDetails());
         return result;
     }

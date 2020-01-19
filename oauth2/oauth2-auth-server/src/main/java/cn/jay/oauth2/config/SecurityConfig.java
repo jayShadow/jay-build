@@ -1,5 +1,6 @@
 package cn.jay.oauth2.config;
 
+import cn.jay.security.bean.SecurityUser;
 import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.security.provider.SmsCodeAuthenticationProvider;
@@ -73,7 +74,7 @@ public class SecurityConfig {
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+            SecurityUser loginUser = (SecurityUser) authentication.getPrincipal();
             response.getWriter().print("登陆成功:");
         });
         filter.setAuthenticationFailureHandler((request, response, exception) -> {

@@ -14,5 +14,5 @@ security:
 #      token-info-uri: http://localhost:9090/oauth/check_token
 #      user-info-uri: http://localhost:9090/oauth/user/
       jwt:
-        key-uri: http://localhost:9090/oauth/token_key
+        key-uri: http://localhost:9090/oauth/token_key    // 获得jwt加密公钥
 

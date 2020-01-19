@@ -47,7 +47,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
     protected Authentication createSuccessAuthentication(SecurityUser loadedUser, Authentication authentication) {
         SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(
-                loadedUser.getLoginUser(), authentication.getCredentials(), loadedUser.getAuthorities());
+                loadedUser, authentication.getCredentials(), loadedUser.getAuthorities());
         result.setDetails(authentication.getDetails());
         return result;
     }

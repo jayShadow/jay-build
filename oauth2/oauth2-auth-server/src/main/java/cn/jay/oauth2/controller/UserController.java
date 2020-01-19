@@ -1,6 +1,7 @@
 package cn.jay.oauth2.controller;
 
 import cn.jay.security.bean.LoginUser;
+import cn.jay.security.bean.SecurityUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +22,7 @@ public class UserController {
 
     @GetMapping("/")
     @PreAuthorize("hasAuthority('add_user')")
-    public LoginUser add(@AuthenticationPrincipal LoginUser loginUser, HttpServletRequest request, Authentication authentication) {
+    public SecurityUser add(@AuthenticationPrincipal SecurityUser loginUser, HttpServletRequest request, Authentication authentication) {
         HttpSession session = request.getSession();
         return loginUser;
     }
