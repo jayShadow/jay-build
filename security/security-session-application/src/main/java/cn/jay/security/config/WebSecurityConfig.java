@@ -4,7 +4,6 @@ import cn.jay.security.ConfigProperties;
 import cn.jay.security.bean.LoginUser;
 import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
-import cn.jay.security.filter.token.AuthenticationTokenFilter;
 import cn.jay.security.provider.SmsCodeAuthenticationProvider;
 import cn.jay.security.provider.UserPwdAuthenticationProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -110,9 +109,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.antMatcher("/**").authorizeRequests();
         http.sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .maximumSessions(2)                 //最大session数量2
-            .maxSessionsPreventsLogin(true)
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(2)                 //最大session数量2
+                .maxSessionsPreventsLogin(true)
 //            .and().
         ;    //最大session时阻止登陆
         // 禁用CSRF 开启跨域

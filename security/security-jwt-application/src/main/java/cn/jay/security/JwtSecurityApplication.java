@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableConfigurationProperties({ConfigProperties.class})
 @MapperScan({"cn.jay.security.mapper"})
-@ComponentScan({"cn.jay.security","cn.jay.mybatis"})
+@ComponentScan({"cn.jay.security", "cn.jay.mybatis"})
 public class JwtSecurityApplication {
 
     public static void main(String[] args) {

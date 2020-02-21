@@ -19,7 +19,7 @@ public class ClientWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**").authorizeRequests()
-                .anyRequest().authenticated();
+        http.formLogin().successForwardUrl("/");
+        http.authorizeRequests().anyRequest().authenticated();
     }
 }

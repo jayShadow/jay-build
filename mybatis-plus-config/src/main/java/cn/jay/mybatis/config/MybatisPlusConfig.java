@@ -31,6 +31,7 @@ public class MybatisPlusConfig {
 
     /**
      * 乐观锁
+     *
      * @return 乐观锁拦截器
      */
     @Bean
@@ -40,11 +41,12 @@ public class MybatisPlusConfig {
 
     /**
      * 字段填充器（创建人、创建时间、更新人、更新时间）
+     *
      * @return 填充器
      */
     @Bean
     public MetaObjectHandler MetaObjectHandler() {
-        return new MetaObjectHandler(){
+        return new MetaObjectHandler() {
             // TODO ThreadLocal中暂存 登陆用户 或者session中获取
             @Override
             public void insertFill(MetaObject metaObject) {

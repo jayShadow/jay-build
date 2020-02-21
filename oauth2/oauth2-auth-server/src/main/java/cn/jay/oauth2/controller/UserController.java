@@ -1,6 +1,5 @@
 package cn.jay.oauth2.controller;
 
-import cn.jay.security.bean.LoginUser;
 import cn.jay.security.bean.SecurityUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

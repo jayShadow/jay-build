@@ -5,7 +5,6 @@ import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.security.provider.SmsCodeAuthenticationProvider;
 import cn.jay.security.provider.UserPwdAuthenticationProvider;
-import cn.jay.security.bean.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

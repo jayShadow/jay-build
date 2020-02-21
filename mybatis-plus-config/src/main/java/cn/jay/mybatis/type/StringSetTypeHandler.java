@@ -11,8 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,7 +21,9 @@ import java.util.stream.Collectors;
 @MappedTypes(Set.class)
 public class StringSetTypeHandler extends BaseTypeHandler<Set<String>> {
 
-    /** 分隔符 */
+    /**
+     * 分隔符
+     */
     private static final String SEPARATOR = ",";
 
     @Override

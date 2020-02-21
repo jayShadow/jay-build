@@ -82,7 +82,7 @@ public class Oauth2Client implements ClientDetails {
 
     @Override
     public boolean isAutoApprove(String scope) {
-        return CollectionUtils.isEmpty(clientDetail.getAutoApproveScope())? false: clientDetail.getAutoApproveScope().contains(scope);
+        return CollectionUtils.isEmpty(clientDetail.getAutoApproveScope()) ? false : clientDetail.getAutoApproveScope().contains(scope);
     }
 
     @Override

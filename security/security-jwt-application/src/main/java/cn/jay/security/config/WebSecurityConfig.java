@@ -1,13 +1,13 @@
 package cn.jay.security.config;
 
 import cn.jay.security.ConfigProperties;
+import cn.jay.security.bean.LoginUser;
 import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.security.filter.token.AuthenticationTokenFilter;
 import cn.jay.security.provider.SmsCodeAuthenticationProvider;
-import cn.jay.security.utils.JwtTokenUtil;
-import cn.jay.security.bean.LoginUser;
 import cn.jay.security.provider.UserPwdAuthenticationProvider;
+import cn.jay.security.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;

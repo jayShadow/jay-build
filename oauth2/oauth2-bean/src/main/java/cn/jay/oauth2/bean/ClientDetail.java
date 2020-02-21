@@ -10,9 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 

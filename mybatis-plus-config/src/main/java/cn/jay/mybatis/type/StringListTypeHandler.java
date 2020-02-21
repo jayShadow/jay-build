@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
 @MappedTypes(List.class)
 public class StringListTypeHandler extends BaseTypeHandler<List<String>> {
 
-    /** 分隔符 */
+    /**
+     * 分隔符
+     */
     private static final String SEPARATOR = ",";
 
     @Override

@@ -1,6 +1,5 @@
 package cn.jay.common.bean;
 
-import cn.jay.common.bean.BaseCommonEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;

@@ -12,13 +12,14 @@ security:
       client-secret: 123456
       user-authorization-uri: ${auth-server}/oauth/authorize
       access-token-uri: ${auth-server}/oauth/token
-      registered-redirect-uri: http://www.baidu.com
-      authorized-grant-types:
-        - client_credentials
     resource:
       jwt:
         key-uri: ${auth-server}/oauth/token_key    #获得jwt加密公钥
 
 auth-server: http://localhost:9090
 
-
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
