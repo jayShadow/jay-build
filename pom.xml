@@ -12,6 +12,7 @@
         <module>mybatis-plus-config</module>
         <module>simple-project</module>
         <module>common-annotation</module>
+        <module>security-config</module>
     </modules>
     <packaging>pom</packaging>
     <name>0.security-demo</name>

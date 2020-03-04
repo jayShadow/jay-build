@@ -13,11 +13,7 @@
     <artifactId>security-jwt-application</artifactId>
     <name>6.security-jwt-application</name>
     <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+
 
         <!-- spring-boot -->
         <dependency>

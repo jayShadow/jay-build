@@ -1,7 +1,7 @@
 package cn.jay.security.config;
 
 import cn.jay.security.ConfigProperties;
-import cn.jay.security.entity.LoginUser;
+import cn.jay.security.entity.AbstractUser;
 import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.security.provider.SmsCodeAuthenticationProvider;
@@ -85,7 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+            AbstractUser abstractUser = (AbstractUser) authentication.getPrincipal();
             response.getWriter().print("登陆成功:");
         });
         filter.setAuthenticationFailureHandler((request, response, exception) -> {

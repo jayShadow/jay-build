@@ -1,5 +1,0 @@
-security:
-  jwt:
-    secret: privateSecret
-    tokenExpireMinute: 30
-    rememberMeExpireDay: 1

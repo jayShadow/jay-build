@@ -12,11 +12,7 @@
     <artifactId>oauth2-client-web</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+
 
         <!-- spring-boot -->
         <dependency>

@@ -15,9 +15,6 @@
     <name>2.security</name>
 
     <modules>
-        <module>security-bean</module>
-        <module>security-service</module>
-        <module>security-config</module>
 
         <module>security-jwt-application</module>
         <module>security-session-application</module>

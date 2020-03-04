@@ -11,6 +11,11 @@
 
     <groupId>cn.jay.simple</groupId>
     <artifactId>simple-identity</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>simple-identity-bean</module>
+    </modules>
 
 
 </project>
