@@ -1,6 +1,6 @@
 package cn.jay.security.utils;
 
-import cn.jay.security.bean.LoginUser;
+import cn.jay.security.entity.LoginUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

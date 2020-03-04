@@ -1,6 +1,6 @@
 package cn.jay.security.controller;
 
-import cn.jay.security.bean.SecurityUser;
+import cn.jay.security.entity.SecurityUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

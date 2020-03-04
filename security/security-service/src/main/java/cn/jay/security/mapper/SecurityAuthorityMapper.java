@@ -1,6 +1,6 @@
 package cn.jay.security.mapper;
 
-import cn.jay.security.bean.SecurityAuthority;
+import cn.jay.security.entity.SecurityAuthority;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

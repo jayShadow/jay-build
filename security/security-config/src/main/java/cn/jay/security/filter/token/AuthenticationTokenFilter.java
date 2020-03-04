@@ -1,6 +1,6 @@
 package cn.jay.security.filter.token;
 
-import cn.jay.security.bean.SecurityUser;
+import cn.jay.security.entity.SecurityUser;
 import cn.jay.security.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

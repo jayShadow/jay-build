@@ -1,6 +1,6 @@
 package cn.jay.security.mapper;
 
-import cn.jay.security.bean.LoginUser;
+import cn.jay.security.entity.LoginUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

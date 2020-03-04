@@ -1,6 +1,6 @@
 package cn.jay.oauth2.bean;
 
-import cn.jay.common.bean.BaseCommonEntity;
+import cn.jay.common.entity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,7 +24,7 @@ import java.util.Set;
 @Accessors(chain = true)
 @TableName(value = "t_client_detail")
 @ApiModel(value = "客户端", description = "客户端")
-public class ClientDetail extends BaseCommonEntity {
+public class ClientDetail extends BaseEntity {
 
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "主键", position = 1)

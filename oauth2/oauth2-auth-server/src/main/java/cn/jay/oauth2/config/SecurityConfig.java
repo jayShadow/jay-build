@@ -1,6 +1,6 @@
 package cn.jay.oauth2.config;
 
-import cn.jay.security.bean.SecurityUser;
+import cn.jay.security.entity.SecurityUser;
 import cn.jay.security.filter.login.SmsCodeAuthenticationFilter;
 import cn.jay.security.filter.login.UserPwdAuthenticationFilter;
 import cn.jay.security.provider.SmsCodeAuthenticationProvider;

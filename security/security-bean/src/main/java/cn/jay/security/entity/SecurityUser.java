@@ -1,4 +1,4 @@
-package cn.jay.security.bean;
+package cn.jay.security.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

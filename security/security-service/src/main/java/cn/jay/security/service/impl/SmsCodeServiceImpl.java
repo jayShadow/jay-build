@@ -1,8 +1,8 @@
 package cn.jay.security.service.impl;
 
-import cn.jay.security.bean.LoginUser;
-import cn.jay.security.bean.SecurityAuthority;
-import cn.jay.security.bean.SecurityUser;
+import cn.jay.security.entity.LoginUser;
+import cn.jay.security.entity.SecurityAuthority;
+import cn.jay.security.entity.SecurityUser;
 import cn.jay.security.mapper.LoginUserMapper;
 import cn.jay.security.mapper.SecurityAuthorityMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

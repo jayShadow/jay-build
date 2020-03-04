@@ -6,6 +6,8 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     auto-mapping-unknown-column-behavior: warning
     cache-enabled: false
+    # debug
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 spring:
   datasource:
